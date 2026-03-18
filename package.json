@@ -1,0 +1,10 @@
+{
+  "name": "pepmaxx",
+  "version": "1.0.0",
+  "description": "The Peptide Research Database — pepmaxx.xyz",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve public -l 3000",
+    "start": "npx serve public"
+  }
+}

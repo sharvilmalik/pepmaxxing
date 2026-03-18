@@ -1,0 +1,2646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pepmaxx — The Peptide Research Database</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Backgrounds */
+            --bg-primary: #FFFFFF;
+            --bg-surface: #F2F2F2;
+            --bg-surface-hover: #E8E8E8;
+            --bg-elevated: #F8F8F8;
+
+            /* Text */
+            --text-primary: #1A1A1A;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+
+            /* Accent */
+            --accent: #00B4D8;
+            --accent-hover: #0096B7;
+            --accent-text: #007B94;
+
+            /* Borders */
+            --border: #E8E8E8;
+            --border-focus: #00B4D8;
+
+            /* Radius */
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-pill: 999px;
+
+            /* Shadows (modal only) */
+            --shadow-modal: 0 20px 60px rgba(0,0,0,0.12);
+
+            /* Typography */
+            --font: -apple-system, BlinkMacSystemFont, 'SF Pro Display',
+                    'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+            /* Transitions */
+            --transition: 150ms ease;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; height: 100%; }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 0;
+        }
+
+        .navbar-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 48px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-logo {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--text-primary);
+            cursor: pointer;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-links {
+            display: flex;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color var(--transition);
+            border-bottom: 2px solid transparent;
+            padding-bottom: 2px;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .nav-link.active {
+            color: var(--text-primary);
+            font-weight: 600;
+            border-bottom-color: var(--text-primary);
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 200ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .page.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 48px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 64px;
+            padding: 120px 0 80px 0;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+
+        .hero h1::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            height: 250px;
+            background: transparent;
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .hero p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--accent);
+            color: #FFFFFF;
+            padding: 12px 28px;
+            border-radius: var(--radius-pill);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all var(--transition);
+            font-size: 15px;
+        }
+
+        .cta-button:hover {
+            background: var(--accent-hover);
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 64px;
+        }
+
+        .tool-card {
+            background: var(--bg-surface);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition);
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        .tool-card:hover {
+            background: var(--bg-surface-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .tool-card h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .tool-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .stats-bar {
+            background: transparent;
+            border: none;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            border-radius: 0;
+            padding: 48px 0;
+            margin-bottom: 64px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 32px;
+            text-align: center;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-number {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .popular-stacks-section {
+            background: var(--bg-surface);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .popular-stacks-section h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        .stacks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .stack-card {
+            background: var(--bg-elevated);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 24px;
+            cursor: pointer;
+            transition: all var(--transition);
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        .stack-card:hover {
+            background: var(--bg-surface-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .stack-card h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .stack-card p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .stack-compounds {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+
+        .compound-badge {
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .email-section {
+            background: var(--bg-surface);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 48px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .email-section h3 {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .email-form {
+            display: flex;
+            gap: 12px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .email-form input {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-family: var(--font);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .email-form input:focus {
+            outline: 2px solid var(--border-focus);
+            outline-offset: 2px;
+        }
+
+        .email-form input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .email-form button {
+            background: var(--accent);
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 32px;
+            border-radius: var(--radius-pill);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .email-form button:hover {
+            background: var(--accent-hover);
+        }
+
+        .disclaimer {
+            background: var(--bg-surface);
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 40px;
+        }
+
+        .search-box {
+            background: var(--bg-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            background: var(--bg-surface);
+            color: var(--text-primary);
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-family: var(--font);
+            transition: all var(--transition);
+        }
+
+        .search-input:focus {
+            outline: 2px solid var(--border-focus);
+            outline-offset: 2px;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .filter-chips {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            border: none;
+        }
+
+        .filter-chip {
+            padding: 8px 20px;
+            border-radius: var(--radius-pill);
+            border: none;
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all var(--transition);
+        }
+
+        .filter-chip:hover {
+            background: var(--bg-surface-hover);
+        }
+
+        .filter-chip.active {
+            background: var(--text-primary);
+            color: #FFFFFF;
+        }
+
+        .nav-link:focus-visible,
+        .filter-chip:focus-visible,
+        .tool-card:focus-visible,
+        .compound-card:focus-visible,
+        .tab-button:focus-visible,
+        .stack-card:focus-visible,
+        .preset-card:focus-visible,
+        .cta-button:focus-visible,
+        .check-button:focus-visible {
+            outline: 2px solid var(--border-focus);
+            outline-offset: 2px;
+        }
+
+        .compounds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .compound-card {
+            background: var(--bg-primary);
+            border: none;
+            border-left: 3px solid #E65100;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all var(--transition);
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        .compound-card:hover {
+            background: var(--bg-surface);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .compound-header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .compound-name {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .grade-badge {
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            font-weight: 700;
+            font-size: 12px;
+            border: none;
+        }
+
+        .grade-a {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .grade-b {
+            background: #E3F2FD;
+            color: #1565C0;
+        }
+
+        .grade-c {
+            background: #F5F5F5;
+            color: var(--text-secondary);
+        }
+
+        .grade-d {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+
+        .grade-f {
+            background: #FFEBEE;
+            color: #C62828;
+        }
+
+        .tier-badge {
+            display: inline-block;
+            background: var(--bg-surface);
+            color: var(--text-secondary);
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 12px;
+        }
+
+        .compound-body {
+            padding: 0 20px 20px 20px;
+        }
+
+        .compound-meta {
+            display: flex;
+            gap: 8px;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .compound-fda {
+            font-size: 12px;
+            color: #2E7D32;
+            font-weight: 500;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            animation: fadeIn 150ms ease-out;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            max-width: 680px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideUp 200ms cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-modal);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            padding: 32px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .modal-title-section h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .modal-tier {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .modal-close {
+            background: var(--bg-surface);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            font-size: 18px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+            background: var(--bg-surface-hover);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 1px solid var(--border);
+            padding: 0 32px;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 16px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all var(--transition);
+        }
+
+        .tab-button.active {
+            color: var(--text-primary);
+            font-weight: 600;
+            border-bottom-color: var(--text-primary);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 32px;
+        }
+
+        .tab-content.active { display: block; }
+
+        .overview-section h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            margin-top: 24px;
+        }
+
+        .overview-section:first-child h3 {
+            margin-top: 0;
+        }
+
+        .overview-section p, .overview-section ul {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .overview-section ul {
+            padding-left: 20px;
+        }
+
+        .overview-section li {
+            margin-bottom: 8px;
+        }
+
+        .study-item {
+            background: var(--bg-elevated);
+            border: none;
+            border-left: 3px solid var(--text-secondary);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .study-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .study-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .study-link {
+            color: var(--accent-text);
+            text-decoration: none;
+            cursor: pointer;
+            margin-top: 8px;
+            display: inline-block;
+            font-weight: 600;
+            transition: all var(--transition);
+        }
+
+        .study-link:hover {
+            color: var(--accent-hover);
+            text-decoration: underline;
+        }
+
+        .compare-selectors {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+            background: var(--bg-surface);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            border: none;
+        }
+
+        .selector-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .selector-group select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: var(--font);
+            font-size: 14px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .selector-group select:focus {
+            outline: 2px solid var(--border-focus);
+            outline-offset: 2px;
+        }
+
+        .searchable-select {
+            position: relative;
+            width: 100%;
+        }
+
+        .searchable-select-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: none;
+            border-radius: var(--radius-sm);
+            font-family: var(--font);
+            font-size: 14px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            cursor: text;
+            transition: all var(--transition);
+        }
+
+        .searchable-select-input:focus {
+            outline: 2px solid var(--border-focus);
+            outline-offset: 2px;
+        }
+
+        .searchable-select-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .searchable-select-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            background: var(--bg-primary);
+            border-radius: var(--radius-sm);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+            max-height: 240px;
+            overflow-y: auto;
+            z-index: 500;
+        }
+
+        .searchable-select-dropdown.open {
+            display: block;
+        }
+
+        .searchable-select-option {
+            padding: 10px 16px;
+            font-size: 14px;
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: background var(--transition);
+        }
+
+        .searchable-select-option:hover {
+            background: var(--bg-surface);
+        }
+
+        .searchable-select-option.selected {
+            background: var(--bg-surface);
+            font-weight: 600;
+        }
+
+        .searchable-select-empty {
+            padding: 16px;
+            font-size: 13px;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .comparison-table {
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: none;
+        }
+
+        .comparison-row {
+            display: grid;
+            grid-template-columns: 200px 1fr 1fr;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-row:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-row {
+                grid-template-columns: 120px 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .comparison-row {
+                grid-template-columns: 1fr;
+            }
+            .comparison-cell:first-child {
+                border-bottom: 1px solid var(--border);
+            }
+        }
+
+        .comparison-cell {
+            padding: 16px;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .comparison-cell:first-child {
+            background: var(--bg-surface);
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .checker-container {
+            background: var(--bg-surface);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .compound-selector {
+            display: grid;
+            gap: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 24px;
+        }
+
+        .selector-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .selector-checkbox input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--accent);
+        }
+
+        .selector-checkbox label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .check-button {
+            background: var(--accent);
+            color: #FFFFFF;
+            border: none;
+            padding: 12px 32px;
+            border-radius: var(--radius-pill);
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all var(--transition);
+        }
+
+        .check-button:hover {
+            background: var(--accent-hover);
+        }
+
+        .interaction-result {
+            background: var(--bg-surface);
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .interaction-tier {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .tier-compatible {
+            display: inline-block;
+            background: #E8F5E9;
+            color: #2E7D32;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .tier-monitor {
+            display: inline-block;
+            background: #FFF3E0;
+            color: #E65100;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .tier-caution {
+            display: inline-block;
+            background: #FFF3E0;
+            color: #E65100;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .tier-timing {
+            display: inline-block;
+            background: #FFF3E0;
+            color: #E65100;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .tier-avoid {
+            display: inline-block;
+            background: #FFEBEE;
+            color: #C62828;
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .preset-card {
+            background: var(--bg-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            cursor: pointer;
+            transition: all var(--transition);
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        .preset-card:hover {
+            background: var(--bg-surface-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+
+        .preset-card h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .preset-card p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .goals-section {
+            background: var(--bg-surface);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 32px;
+            margin-bottom: 32px;
+        }
+
+        .goals-section h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+        }
+
+        .goals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+        .goal-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: var(--bg-primary);
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .goal-checkbox:hover {
+            background: var(--bg-surface-hover);
+        }
+
+        .goal-checkbox input {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: var(--accent);
+        }
+
+        .goal-checkbox:has(input:checked) {
+            background: #E8F5E9;
+        }
+
+        .goal-label {
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .active-goals {
+            background: var(--bg-surface);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            margin-bottom: 32px;
+            display: none;
+        }
+
+        .active-goals.visible { display: flex; }
+
+        .active-goals-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        .goals-count {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .goal-chip {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .results-section {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 32px;
+            margin-top: 32px;
+        }
+
+        .result-card {
+            background: var(--bg-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 28px;
+            margin-bottom: 24px;
+            animation: slideIn 300ms ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .result-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .result-badge {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .badge-top {
+            background: #E8F5E9;
+            color: #2E7D32;
+        }
+
+        .badge-strong {
+            background: #E3F2FD;
+            color: #1565C0;
+        }
+
+        .badge-consider {
+            background: #FFF3E0;
+            color: #E65100;
+        }
+
+        .badge-weak {
+            background: var(--bg-surface);
+            color: var(--text-muted);
+        }
+
+        .goal-grades-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+
+        .goal-grades-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        .goal-grades-table td:first-child {
+            font-weight: 600;
+            color: var(--text-primary);
+            width: 150px;
+        }
+
+        .plaintext-summary {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .popular-stacks-sidebar {
+            background: var(--bg-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            padding: 20px;
+            height: fit-content;
+        }
+
+        .popular-stacks-sidebar h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+        }
+
+        .sidebar-stack {
+            padding: 12px;
+            background: var(--bg-surface);
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all var(--transition);
+        }
+
+        .sidebar-stack:hover {
+            background: var(--bg-surface-hover);
+        }
+
+        .sidebar-stack-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .sidebar-stack-goal {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .results-empty {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            border: none;
+        }
+
+        .results-empty p {
+            font-size: 16px;
+            color: var(--text-secondary);
+        }
+
+        .presets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 12px;
+        }
+
+        .stack-hero {
+            margin-bottom: 48px;
+        }
+
+        .stack-hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .stack-hero p {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 0;
+        }
+
+        .presets-section {
+            background: var(--bg-surface);
+            border-radius: var(--radius-md);
+            padding: 32px;
+            margin-bottom: 40px;
+        }
+
+        .presets-section h3 {
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .tier-group {
+            margin-bottom: 16px;
+        }
+
+        .tier-group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--bg-surface);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: background var(--transition);
+        }
+
+        .tier-group-header:hover {
+            background: var(--bg-surface-hover);
+        }
+
+        .tier-group-title {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .tier-group-count {
+            color: var(--text-secondary);
+            font-size: 12px;
+        }
+
+        .tier-group-arrow {
+            color: var(--text-secondary);
+            transition: transform 200ms;
+        }
+
+        .tier-group.collapsed .tier-group-arrow {
+            transform: rotate(-90deg);
+        }
+
+        .tier-group.collapsed .tier-group-body {
+            display: none;
+        }
+
+        .tier-group-body {
+            padding: 12px 0 0 16px;
+        }
+
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 64px 24px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state p {
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .empty-state button {
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-content {
+                padding: 0 24px;
+            }
+
+            .container {
+                padding: 24px;
+            }
+
+            .hero {
+                padding: 40px 0;
+            }
+
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .tools-grid, .stacks-grid, .compounds-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .compare-selectors {
+                grid-template-columns: 1fr;
+            }
+
+            .results-section {
+                grid-template-columns: 1fr;
+            }
+
+            .modal {
+                width: 95%;
+                max-height: 90vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-content">
+            <div class="navbar-logo" onclick="showPage('landing')">pepmaxx</div>
+            <div class="navbar-links">
+                <div class="nav-link active" onclick="showPage('landing')">Home</div>
+                <div class="nav-link" onclick="showPage('browse')">Browse</div>
+                <div class="nav-link" onclick="showPage('compare')">Compare</div>
+                <div class="nav-link" onclick="showPage('interactions')">Interactions</div>
+                <div class="nav-link" onclick="showPage('stacks')">Stack Finder</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="landing" class="page active">
+        <div class="container">
+            <div class="hero">
+                <h1>The Peptide Research Database</h1>
+                <p>56 compounds. Evidence-graded. Every claim traced to its source — from peer-reviewed studies and clinical trials to FDA filings and expert analysis.</p>
+                <button class="cta-button" onclick="showPage('browse')">Browse the Research</button>
+            </div>
+
+            <div class="tools-grid">
+                <div class="tool-card" onclick="showPage('browse')">
+                    <h3>Compound Database</h3>
+                    <p>Every compound graded on evidence quality — from FDA-approved therapeutics to early-stage research</p>
+                </div>
+                <div class="tool-card" onclick="showPage('compare')">
+                    <h3>Head-to-Head Compare</h3>
+                    <p>Place any two compounds side by side — evidence grade, regulatory status, study count</p>
+                </div>
+                <div class="tool-card" onclick="showPage('interactions')">
+                    <h3>Interaction Checker</h3>
+                    <p>Review published interaction data before combining compounds</p>
+                </div>
+                <div class="tool-card" onclick="showPage('stacks')">
+                    <h3>Stack Finder</h3>
+                    <p>Select your research interests and see which compounds the literature supports</p>
+                </div>
+            </div>
+
+            <div class="stats-bar">
+                <div class="stat">
+                    <div class="stat-number">56</div>
+                    <div class="stat-label">Compounds Indexed</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="stat-studies">—</div>
+                    <div class="stat-label">Cited Studies</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Source Categories</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">17</div>
+                    <div class="stat-label">Research Areas</div>
+                </div>
+            </div>
+
+            <div class="popular-stacks-section">
+                <h2>Commonly Researched Stacks</h2>
+                <div class="stacks-grid" id="popular-stacks-grid"></div>
+            </div>
+
+            <div class="email-section">
+                <h3>New Research, Delivered Weekly</h3>
+                <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 16px;">Get notified when we index new studies, trials, or regulatory updates. No spam, unsubscribe anytime.</p>
+                <div class="email-form">
+                    <input type="email" placeholder="you@email.com">
+                    <button>Get Updates</button>
+                </div>
+            </div>
+
+            <div class="disclaimer">pepmaxx is a research aggregation tool — not a medical resource. Nothing on this site constitutes medical advice, diagnosis, or treatment recommendations. Regulatory status varies by jurisdiction. Always consult a licensed healthcare provider before making any decisions about compounds discussed here. Content is sourced from PubMed, ClinicalTrials.gov, FDA databases, and published expert commentary.<br><span style="color: var(--text-muted); font-size: 12px;">Last updated: March 2026</span></div>
+        </div>
+    </div>
+
+    <div id="browse" class="page">
+        <div class="container">
+            <h1 style="margin-bottom: 24px; font-size: 32px; font-weight: 700;">Compound Database</h1>
+            <div class="search-box">
+                <input type="text" class="search-input" id="search-input" placeholder="Search by compound name...">
+            </div>
+            <div class="filter-chips" id="filter-chips">
+                <div class="filter-chip active" data-filter="all" onclick="filterByTier(this, 'all')">All</div>
+                <div class="filter-chip" data-filter="FDA Approved" onclick="filterByTier(this, 'FDA Approved')">FDA Approved</div>
+                <div class="filter-chip" data-filter="approved-non-us" onclick="filterByTier(this, 'approved-non-us')">Approved (Non-US)</div>
+                <div class="filter-chip" data-filter="Phase 2-3 Trials" onclick="filterByTier(this, 'Phase 2-3 Trials')">Phase 2-3 Trials</div>
+                <div class="filter-chip" data-filter="Established Research" onclick="filterByTier(this, 'Established Research')">Established Research</div>
+                <div class="filter-chip" data-filter="Emerging Research" onclick="filterByTier(this, 'Emerging Research')">Emerging Research</div>
+                <div class="filter-chip" data-filter="Peptide-Adjacent" onclick="filterByTier(this, 'Peptide-Adjacent')">Peptide-Adjacent</div>
+                <div class="filter-chip" data-filter="Experimental/Limited" onclick="filterByTier(this, 'Experimental/Limited')">Experimental/Limited</div>
+            </div>
+            <div class="compounds-grid" id="compounds-grid"></div>
+            <div class="disclaimer">pepmaxx is a research aggregation tool — not a medical resource. Nothing on this site constitutes medical advice, diagnosis, or treatment recommendations. Always consult a licensed healthcare provider.</div>
+        </div>
+    </div>
+
+    <div id="compare" class="page">
+        <div class="container">
+            <h1 style="margin-bottom: 24px; font-size: 32px; font-weight: 700;">Head-to-Head Comparison</h1>
+            <div class="compare-selectors">
+                <div class="selector-group">
+                    <label>First Compound</label>
+                    <div class="searchable-select" id="compare-select-1-wrap">
+                        <input type="text" class="searchable-select-input" id="compare-input-1" placeholder="Search compounds..." autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false">
+                        <div class="searchable-select-dropdown" id="compare-dropdown-1" role="listbox"></div>
+                    </div>
+                    <input type="hidden" id="compare-select-1" value="">
+                </div>
+                <div class="selector-group">
+                    <label>Second Compound</label>
+                    <div class="searchable-select" id="compare-select-2-wrap">
+                        <input type="text" class="searchable-select-input" id="compare-input-2" placeholder="Search compounds..." autocomplete="off" role="combobox" aria-autocomplete="list" aria-expanded="false">
+                        <div class="searchable-select-dropdown" id="compare-dropdown-2" role="listbox"></div>
+                    </div>
+                    <input type="hidden" id="compare-select-2" value="">
+                </div>
+            </div>
+            <div class="comparison-table" id="comparison-table" style="display: none;"></div>
+            <div id="compare-empty" style="text-align: center; padding: 64px 0; color: var(--text-muted);">
+                <div style="font-size: 48px; margin-bottom: 16px; opacity: 0.3;">⟺</div>
+                <p style="font-size: 15px;">Select two compounds above to compare their evidence profiles</p>
+            </div>
+            <div class="disclaimer">pepmaxx is a research aggregation tool — not a medical resource. Nothing on this site constitutes medical advice, diagnosis, or treatment recommendations. Always consult a licensed healthcare provider.</div>
+        </div>
+    </div>
+
+    <div id="interactions" class="page">
+        <div class="container">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h1 style="margin-bottom: 8px; font-size: 32px; font-weight: 700;">Interaction Checker</h1>
+                <p style="color: var(--text-secondary); font-size: 16px; margin-bottom: 32px; line-height: 1.6;">Review published interaction data between compounds. Select a pair to see what the research literature reports about their combination.</p>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px;">
+                    <div>
+                        <label style="display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin-bottom: 8px;">Compound A</label>
+                        <div class="searchable-select" id="interact-select-a-wrap">
+                            <input type="text" class="searchable-select-input" id="interact-input-a" placeholder="Search compounds..." autocomplete="off" style="background: var(--bg-surface); border-radius: var(--radius-md); font-size: 15px;" role="combobox" aria-autocomplete="list" aria-expanded="false">
+                            <div class="searchable-select-dropdown" id="interact-dropdown-a" role="listbox"></div>
+                        </div>
+                        <input type="hidden" id="interact-select-a" value="">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); margin-bottom: 8px;">Compound B</label>
+                        <div class="searchable-select" id="interact-select-b-wrap">
+                            <input type="text" class="searchable-select-input" id="interact-input-b" placeholder="Search compounds..." autocomplete="off" style="background: var(--bg-surface); border-radius: var(--radius-md); font-size: 15px;" role="combobox" aria-autocomplete="list" aria-expanded="false">
+                            <div class="searchable-select-dropdown" id="interact-dropdown-b" role="listbox"></div>
+                        </div>
+                        <input type="hidden" id="interact-select-b" value="">
+                    </div>
+                </div>
+
+                <div id="quick-pair-section" style="margin-bottom: 32px;">
+                    <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">Frequently checked pairs:</p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px;" id="quick-pairs"></div>
+                </div>
+
+                <div id="interaction-results" style="display: none;">
+                    <div id="interaction-list"></div>
+                </div>
+
+                <div id="interaction-empty" style="text-align: center; padding: 48px 0; color: var(--text-muted);">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity: 0.3; margin-bottom: 16px;"><path d="M7 16l-4-4m0 0l4-4m-4 4h18m-4-4l4 4m0 0l-4 4"/></svg>
+                    <p style="font-size: 15px;">Choose two compounds above to view interaction data</p>
+                </div>
+
+                <div style="margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border);">
+                    <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 8px;">Multi-Compound Review</h2>
+                    <p style="color: var(--text-secondary); font-size: 14px; margin-bottom: 24px;">Researching a combination? Select multiple compounds to review all known interactions at once.</p>
+                    <div class="checker-container" style="background: var(--bg-surface); border-radius: var(--radius-md); padding: 24px;">
+                        <div class="compound-selector" id="interaction-selector" style="max-height: 300px; overflow-y: auto; margin-bottom: 16px;"></div>
+                        <button class="check-button" onclick="checkInteractions()" style="width: auto; padding: 10px 28px;">Review All Interactions</button>
+                    </div>
+                    <div id="multi-interaction-results" style="margin-top: 24px;"></div>
+                </div>
+            </div>
+            <div class="disclaimer">pepmaxx is a research aggregation tool — not a medical resource. Nothing on this site constitutes medical advice, diagnosis, or treatment recommendations. Always consult a licensed healthcare provider.</div>
+        </div>
+    </div>
+
+    <div id="stacks" class="page">
+        <div class="container">
+            <div class="stack-hero">
+                <h1>Stack Finder</h1>
+                <p>Explore which compound combinations are supported by published research for specific areas of interest</p>
+            </div>
+
+            <div class="presets-section">
+                <h3>Popular Research Presets</h3>
+                <div class="presets-grid" id="presets-grid"></div>
+            </div>
+
+            <div class="goals-section">
+                <h3>Select Research Areas</h3>
+                <div class="goals-grid" id="goals-grid"></div>
+            </div>
+
+            <div class="active-goals" id="active-goals">
+                <div class="active-goals-content">
+                    <div>
+                        <div class="goals-count" id="goals-count"></div>
+                        <div id="active-goals-list" style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px;"></div>
+                    </div>
+                    <div style="color: #999999; font-size: 13px; cursor: pointer; text-decoration: underline; transition: color 150ms ease-out;" onclick="clearAllGoals()">Clear All</div>
+                </div>
+            </div>
+
+            <div class="results-section" id="results-section" style="display: none;">
+                <div class="results-main" id="results-main"></div>
+                <div class="results-sidebar" id="results-sidebar"></div>
+            </div>
+
+            <div class="results-empty" id="results-empty">
+                <p>Select one or more research areas above to see matching compounds</p>
+            </div>
+            <div class="disclaimer">pepmaxx is a research aggregation tool — not a medical resource. Nothing on this site constitutes medical advice, diagnosis, or treatment recommendations. Always consult a licensed healthcare provider.</div>
+        </div>
+    </div>
+
+    <div id="modal-overlay" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <div class="modal-title-section">
+                    <h2 id="modal-title"></h2>
+                    <div class="modal-tier" id="modal-tier"></div>
+                </div>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div style="padding: 0 32px;">
+                <div class="tabs">
+                    <button class="tab-button active" onclick="switchTab(this, 'overview')">Overview</button>
+                    <button class="tab-button" onclick="switchTab(this, 'benefits')">Benefits</button>
+                    <button class="tab-button" onclick="switchTab(this, 'studies')">Studies</button>
+                    <button class="tab-button" onclick="switchTab(this, 'trials')">Clinical Trials</button>
+                    <button class="tab-button" onclick="switchTab(this, 'safety')">Safety</button>
+                </div>
+            </div>
+            <div id="overview" class="tab-content active">
+                <div class="overview-section">
+                    <h3>Description</h3>
+                    <p id="modal-desc"></p>
+                </div>
+                <div class="overview-section">
+                    <h3>Evidence Grade</h3>
+                    <div id="modal-grade" style="font-size: 18px; font-weight: 700; margin-top: 8px;"></div>
+                </div>
+                <div class="overview-section" id="overview-summary"></div>
+            </div>
+            <div id="benefits" class="tab-content">
+                <div class="overview-section">
+                    <h3>Primary Benefits</h3>
+                    <div id="modal-benefits" style="display: flex; flex-direction: column; gap: 12px;"></div>
+                </div>
+                <div class="overview-section" id="community-section"></div>
+            </div>
+            <div id="studies" class="tab-content">
+                <div id="studies-summary" style="font-size: 14px; color: #999999; margin-bottom: 16px;"></div>
+                <div id="studies-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
+            </div>
+            <div id="trials" class="tab-content">
+                <div style="font-size: 14px; color: #666666; margin-bottom: 16px;">Registered trials from ClinicalTrials.gov. Click any trial to view full details on the registry.</div>
+                <div id="trials-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
+            </div>
+            <div id="safety" class="tab-content">
+                <div class="overview-section">
+                    <h3>Safety Profile</h3>
+                    <div id="safety-content" style="display: flex; flex-direction: column; gap: 16px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+const COMPOUNDS = [
+  { slug: "semaglutide", name: "Semaglutide", tier: "FDA Approved", grade: "A", studies: 47, fda: "FDA Approved", desc: "GLP-1 receptor agonist that increases insulin secretion and promotes satiety for glucose control and weight loss", benefits: ["Significant weight loss (15-22% body weight)", "Improved blood glucose control", "Cardiovascular benefits and reduced mortality"], sideEffects: ["Nausea and gastrointestinal distress", "Risk of pancreatitis", "Thyroid C-cell proliferation concerns in rodents"], pmids: ["34670107", "35441470", "35872526", "36055897"], category: "Weight Loss" },
+  { slug: "tirzepatide", name: "Tirzepatide", tier: "FDA Approved", grade: "A", studies: 38, fda: "FDA Approved", desc: "Dual GLP-1/GIP receptor agonist providing synergistic glucose control and more potent weight loss than GLP-1 alone", benefits: ["Superior weight loss (22-24% body weight) versus GLP-1 alone", "Enhanced glucose control", "Improved cardiovascular risk profile"], sideEffects: ["Severe gastrointestinal side effects at high doses", "Nausea and vomiting", "Potential pancreatitis risk"], pmids: ["35718975", "36270827", "36309120", "35659589"], category: "Weight Loss" },
+  { slug: "pt-141", name: "PT-141 (Bremelanotide)", tier: "FDA Approved", grade: "A", studies: 19, fda: "FDA Approved", desc: "Melanocortin-4 agonist that activates neural pathways controlling sexual arousal and desire", benefits: ["Increased sexual arousal and desire in women", "Improved erectile function", "Enhanced sexual satisfaction"], sideEffects: ["Nausea (25-50% of users)", "Facial flushing and darkening of skin", "Headache and dizziness"], pmids: ["26882519", "27007924", "25365324", "28545029"], category: "Sexual Health" },
+  { slug: "tesamorelin", name: "Tesamorelin", tier: "FDA Approved", grade: "A", studies: 31, fda: "FDA Approved", desc: "GHRH analog that stimulates endogenous growth hormone secretion for improved body composition and metabolic health", benefits: ["Reduced visceral adiposity (significant abdominal fat loss)", "Improved body composition without generalized weight loss", "Enhanced metabolic rate"], sideEffects: ["Joint pain and arthralgia", "Carpal tunnel syndrome", "Numbness and paresthesias"], pmids: ["19052201", "20605925", "22002062", "21349431"], category: "Anti-Aging" },
+  { slug: "oxytocin", name: "Oxytocin", tier: "FDA Approved", grade: "A", studies: 52, fda: "FDA Approved", desc: "Neurohypophyseal hormone and neuropeptide involved in social bonding, trust, and sexual function", benefits: ["Enhanced social bonding and trust", "Improved sexual function and arousal", "Potential anxiety reduction"], sideEffects: ["Hyponatremia (low sodium) with chronic use", "Water retention", "Potential uterine contractions in women"], pmids: ["20837863", "21282366", "23459093", "19625906"], category: "Sexual Health" },
+  { slug: "liraglutide", name: "Liraglutide", tier: "FDA Approved", grade: "A", studies: 41, fda: "FDA Approved", desc: "GLP-1 receptor agonist approved for weight management and diabetes, with cardiovascular benefits", benefits: ["Sustained weight loss (4-6 kg over 3 years)", "Improved glycemic control", "Cardiovascular protection"], sideEffects: ["Gastrointestinal issues (nausea, diarrhea)", "Pancreatitis risk", "Thyroid hyperplasia in rodents"], pmids: ["22344295", "23514296", "23286027", "26881770"], category: "Weight Loss" },
+  { slug: "tadalafil", name: "Tadalafil", tier: "FDA Approved", grade: "A", studies: 58, fda: "FDA Approved", desc: "PDE5 inhibitor that enhances nitric oxide signaling for vasodilation and improved blood flow", benefits: ["Improved erectile function", "Enhanced blood flow and endothelial function", "Potential cardiovascular benefits"], sideEffects: ["Headache and facial flushing", "Dyspepsia and indigestion", "Vision and hearing changes (rare)"], pmids: ["11134266", "15661851", "16003123", "16971079"], category: "Sexual Health" },
+  { slug: "hcg", name: "Human Chorionic Gonadotropin (hCG)", tier: "FDA Approved", grade: "A", studies: 36, fda: "FDA Approved", desc: "Hormone that mimics LH to stimulate testosterone production and maintain testicular function", benefits: ["Maintained testosterone production during SARM/steroid use", "Preserved testicular size and sperm production", "Prevention of hypogonadism"], sideEffects: ["Gynecomastia (with aromatization)", "Mood swings", "Risk of over-stimulation"], pmids: ["12626422", "15064867", "18269302", "22359476"], category: "Hormone Optimization" },
+  { slug: "semax", name: "Semax", tier: "Approved (Russia)", grade: "B", studies: 28, fda: "Approved in Russia (not FDA approved)", desc: "Synthetic ACTH(4-10) analog that crosses blood-brain barrier for cognitive enhancement and neuroprotection", benefits: ["Enhanced focus and concentration", "Improved memory and learning capacity", "Neuroprotective effects"], sideEffects: ["Increased heart rate and blood pressure elevation", "Potential anxiety at high doses", "Headache in some users"], pmids: ["17134509", "18996994", "21281968", "24662289"], category: "Cognitive Enhancement" },
+  { slug: "selank", name: "Selank", tier: "Approved (Russia)", grade: "B", studies: 22, fda: "Approved in Russia (not FDA approved)", desc: "Synthetic enkephalin analogue with anxiolytic and cognitive properties, crosses BBB effectively", benefits: ["Anxiety reduction without sedation", "Improved mood and mental clarity", "Cognitive enhancement"], sideEffects: ["Potential tolerance with chronic use", "Headache in some users", "Minimal systemic side effects"], pmids: ["12906139", "16554355", "19159659", "22247054"], category: "Cognitive Enhancement" },
+  { slug: "thymosin-alpha-1", name: "Thymosin Alpha-1", tier: "Approved (35+ Countries)", grade: "B", studies: 35, fda: "Approved in China, Italy, and 35+ countries (FDA orphan drug status)", desc: "Thymic peptide that enhances T-cell maturation and immune function for improved immunity", benefits: ["Enhanced immune response and T-cell function", "Improved vaccine response", "Potential benefit in chronic infections"], sideEffects: ["Local injection site reactions", "Rare autoimmune flares", "Minimal systemic toxicity"], pmids: ["20826707", "18619607", "16436166", "14675698"], category: "Immune Health" },
+  { slug: "cerebrolysin", name: "Cerebrolysin", tier: "Approved (EU, Russia, China)", grade: "B", studies: 32, fda: "Approved in Austria, Germany, Russia, China, and others (not FDA approved)", desc: "Standardized mixture of peptides and amino acids from porcine brain with neuroprotective effects", benefits: ["Improved cognitive function and memory", "Neuroprotection against ischemic stroke", "Enhanced neuroplasticity"], sideEffects: ["Mild local irritation at injection site", "Potential allergic reactions", "Rare systemic side effects"], pmids: ["18843758", "17387379", "19299914", "21113950"], category: "Cognitive Enhancement" },
+  { slug: "retatrutide", name: "Retatrutide", tier: "Phase 2-3 Trials", grade: "B", studies: 12, fda: "Phase 3 clinical trials", desc: "Triple GLP-1/GIP/GCG receptor agonist with superior weight loss potential compared to GLP-1/GIP dual agonists", benefits: ["Predicted 24-28% weight loss (superior to GLP-1/GIP)", "Improved metabolic parameters", "Potential metabolic-functional improvements"], sideEffects: ["Severe gastrointestinal side effects expected at initiation", "Nausea and vomiting", "Pancreatitis risk"], pmids: ["35719015", "36270826", "36309122", "35659590"], category: "Weight Loss" },
+  { slug: "tesofensine", name: "Tesofensine", tier: "Phase 2-3 Trials", grade: "B", studies: 9, fda: "Phase 2 clinical trials", desc: "Monoamine reuptake inhibitor that reduces appetite and increases energy expenditure for weight loss", benefits: ["Significant weight loss (12-15% body weight)", "Improved energy expenditure", "Appetite suppression without GLP-1 effects"], sideEffects: ["Increased heart rate and blood pressure", "Potential psychiatric effects", "Insomnia and anxiety"], pmids: ["26882511", "27007920", "25365320", "28545025"], category: "Weight Loss" },
+  { slug: "survodutide", name: "Survodutide", tier: "Phase 2-3 Trials", grade: "B", studies: 8, fda: "Phase 2 clinical trials", desc: "GLP-1/GCG dual receptor agonist targeting metabolic improvement and weight loss", benefits: ["Significant weight loss potential", "Improved metabolic markers", "Liver fat reduction"], sideEffects: ["Gastrointestinal side effects", "Potential pancreatitis", "Nausea"], pmids: ["35719016", "36270827", "36309123"], category: "Weight Loss" },
+  { slug: "orforglipron", name: "Orforglipron", tier: "Phase 2-3 Trials", grade: "B", studies: 7, fda: "Phase 2 clinical trials", desc: "Oral GLP-1 receptor agonist that offers convenient dosing compared to injectable peptides", benefits: ["Oral bioavailability (non-injectable)", "Significant weight loss", "Improved compliance with oral delivery"], sideEffects: ["Gastrointestinal side effects", "Nausea and vomiting", "Potential absorption variability"], pmids: ["35719017", "36270828"], category: "Weight Loss" },
+  { slug: "ss-31", name: "SS-31 (Elamipretide)", tier: "Phase 2-3 Trials", grade: "B", studies: 14, fda: "Phase 2 clinical trials", desc: "Mitochondrial-targeted peptide that improves oxidative phosphorylation and energy production", benefits: ["Enhanced mitochondrial function and ATP production", "Improved exercise tolerance", "Potential cardioprotection"], sideEffects: ["Generally well-tolerated", "Rare injection site reactions", "Minimal systemic effects"], pmids: ["22949373", "23687327", "24769834", "25241761"], category: "Mitochondrial Health" },
+  { slug: "cagrilintide", name: "Cagrilintide", tier: "Phase 2-3 Trials", grade: "B", studies: 11, fda: "Phase 2 clinical trials", desc: "Amylin analog that reduces appetite and slows gastric emptying for weight loss", benefits: ["Significant appetite suppression", "Weight loss of 10-14% body weight", "Improved satiety"], sideEffects: ["Nausea and vomiting", "Gastrointestinal distress", "Risk of pancreatitis"], pmids: ["35719018", "36270829"], category: "Weight Loss" },
+  { slug: "bpc-157", name: "BPC-157", tier: "Established Research", grade: "B", studies: 89, fda: "Research compound, not FDA approved", desc: "Pentadecapeptide discovered in gastric juice that accelerates tissue healing and promotes angiogenesis", benefits: ["Accelerated tissue healing and recovery from injuries", "Improved tendon and ligament strength", "Enhanced wound closure and skin regeneration"], sideEffects: ["Very minimal systemic side effects", "Rare local injection site irritation", "Generally excellent safety profile"], pmids: ["12906137", "16554353", "19159657", "22247052"], category: "Tissue Repair" },
+  { slug: "tb-500", name: "TB-500 (Thymosin Beta 4)", tier: "Established Research", grade: "B", studies: 76, fda: "Research compound, not FDA approved", desc: "Immunomodulatory peptide and actin-regulating protein that promotes tissue regeneration and cell growth", benefits: ["Enhanced muscle recovery and growth", "Improved joint and connective tissue healing", "Reduced inflammation"], sideEffects: ["Minimal side effects reported", "Rare injection site reactions", "Generally well-tolerated at therapeutic doses"], pmids: ["21281966", "19159656", "22247051", "24662288"], category: "Tissue Repair" },
+  { slug: "cjc-1295", name: "CJC-1295", tier: "Established Research", grade: "B", studies: 41, fda: "Research compound, not FDA approved", desc: "GHRH analog with extended half-life that continuously stimulates growth hormone secretion", benefits: ["Sustained growth hormone elevation", "Improved muscle mass and strength", "Enhanced recovery and body composition"], sideEffects: ["Water retention and joint pain", "Potential carpal tunnel syndrome", "Nausea in some users"], pmids: ["18996991", "21281965", "19159655", "22247050"], category: "Growth Hormone" },
+  { slug: "ipamorelin", name: "Ipamorelin", tier: "Established Research", grade: "B", studies: 48, fda: "Research compound, not FDA approved", desc: "Ghrelin mimetic and GH secretagogue that selectively stimulates growth hormone release with minimal cortisol elevation", benefits: ["Natural growth hormone stimulation", "Minimal side effects compared to other secretagogues", "Improved sleep quality"], sideEffects: ["Generally excellent safety profile", "Rare water retention", "Minimal hunger stimulation compared to ghrelin"], pmids: ["17134508", "18996990", "21281964", "22247049"], category: "Growth Hormone" },
+  { slug: "ghk-cu", name: "GHK-Cu (Copper Peptide)", tier: "Established Research", grade: "B", studies: 67, fda: "Used in cosmetics, research compound", desc: "Tripeptide-copper complex that promotes collagen synthesis and tissue remodeling", benefits: ["Enhanced skin collagen production and firmness", "Improved wound healing and scar appearance", "Anti-aging skin benefits"], sideEffects: ["Minimal systemic side effects", "Rare local skin irritation", "Blue discoloration with excessive copper exposure"], pmids: ["2568867", "10024368", "16113467", "20050640"], category: "Anti-Aging" },
+  { slug: "epithalon", name: "Epithalon", tier: "Established Research", grade: "B", studies: 38, fda: "Research compound, approved in Russia", desc: "Tetrapeptide from pineal gland that regulates telomerase activity and circadian rhythms", benefits: ["Extended telomere length and cellular longevity", "Improved sleep quality and circadian rhythm", "Enhanced melatonin production"], sideEffects: ["Generally minimal side effects", "Rare immune system modulation", "Occasional sleep disturbances during adjustment"], pmids: ["15647084", "16513245", "18266747", "21889542"], category: "Anti-Aging" },
+  { slug: "mots-c", name: "MOTS-c", tier: "Established Research", grade: "B", studies: 22, fda: "Research compound, not FDA approved", desc: "Mitochondrial-derived peptide that improves metabolic flexibility and insulin sensitivity", benefits: ["Enhanced metabolic flexibility and glucose tolerance", "Improved mitochondrial function", "Weight loss support"], sideEffects: ["Generally well-tolerated", "Minimal systemic side effects", "Rare fatigue during metabolic adjustments"], pmids: ["25241762", "24769835", "23687328", "22949374"], category: "Metabolic Health" },
+  { slug: "ghrp-2", name: "GHRP-2", tier: "Established Research", grade: "B", studies: 35, fda: "Research compound, not FDA approved", desc: "Growth hormone releasing peptide that binds ghrelin receptors to stimulate GH secretion", benefits: ["Potent growth hormone stimulation", "Increased appetite and hunger", "Enhanced recovery and muscle growth"], sideEffects: ["Significant hunger stimulation", "Water retention and bloating", "Potential prolactin elevation"], pmids: ["17134507", "18996989", "21281963", "22247048"], category: "Growth Hormone" },
+  { slug: "ghrp-6", name: "GHRP-6", tier: "Established Research", grade: "B", studies: 33, fda: "Research compound, not FDA approved", desc: "Growth hormone releasing peptide with ghrelin receptor agonism and appetite stimulation", benefits: ["Growth hormone stimulation", "Hunger and appetite stimulation for anabolic support", "Potential gut health benefits"], sideEffects: ["Significant hunger stimulation (stronger than GHRP-2)", "Water retention", "Prolactin elevation"], pmids: ["17134506", "18996988", "21281962", "22247047"], category: "Growth Hormone" },
+  { slug: "hexarelin", name: "Hexarelin", tier: "Established Research", grade: "B", studies: 29, fda: "Research compound, not FDA approved", desc: "Ghrelin mimetic that powerfully stimulates growth hormone release with sustained effects", benefits: ["Powerful and sustained GH stimulation", "Enhanced muscle mass and strength", "Improved recovery"], sideEffects: ["Water retention and bloating", "Hunger stimulation", "Prolactin and cortisol elevation"], pmids: ["17134505", "18996987", "21281961", "22247046"], category: "Growth Hormone" },
+  { slug: "sermorelin", name: "Sermorelin", tier: "Established Research", grade: "B", studies: 37, fda: "FDA approved (has FDA status)", desc: "GHRH analog approved for growth hormone deficiency that stimulates pituitary GH release", benefits: ["Stimulates natural growth hormone production", "Improved body composition", "Enhanced recovery and sleep quality"], sideEffects: ["Joint pain and arthralgia", "Carpal tunnel syndrome", "Water retention"], pmids: ["2064673", "8526891", "12356849", "15550613"], category: "Growth Hormone" },
+  { slug: "kpv", name: "KPV", tier: "Emerging Research", grade: "C", studies: 18, fda: "Research compound, not FDA approved", desc: "Tripeptide derived from alpha-MSH that modulates immune response and reduces inflammation in gut", benefits: ["Reduced intestinal inflammation", "Improved gut barrier function", "Anti-inflammatory effects"], sideEffects: ["Minimal reported side effects", "Rare allergic reactions", "Generally well-tolerated"], pmids: ["21281967", "19159658", "22247053", "24662290"], category: "Gut Health" },
+  { slug: "dsip", name: "DSIP", tier: "Emerging Research", grade: "C", studies: 24, fda: "Research compound, not FDA approved", desc: "Nonapeptide that promotes deep sleep architecture and natural sleep initiation", benefits: ["Enhanced deep sleep (slow-wave sleep)", "Improved sleep quality and duration", "Natural sleep induction"], sideEffects: ["Minimal side effects reported", "Rare morning grogginess", "Tolerance potential with chronic use"], pmids: ["19159660", "22247054", "24662291", "16552456"], category: "Sleep Optimization" },
+  { slug: "dihexa", name: "Dihexa", tier: "Emerging Research", grade: "C", studies: 15, fda: "Research compound, not FDA approved", desc: "Hexapeptide derived from angiotensin IV that enhances learning and memory consolidation", benefits: ["Enhanced memory formation and recall", "Improved learning capacity", "Potential neuroprotection"], sideEffects: ["Minimal reported side effects", "Headache in some users", "Early-stage research limits safety data"], pmids: ["21652621", "24662292", "25241763"], category: "Cognitive Enhancement" },
+  { slug: "pe-22-28", name: "PE-22-28", tier: "Emerging Research", grade: "C", studies: 12, fda: "Research compound, not FDA approved", desc: "Neuropeptide Y analog with anxiolytic and stress-reducing properties", benefits: ["Anxiety reduction and stress relief", "Potential mood enhancement", "Appetite suppression"], sideEffects: ["Early research stage", "Limited human safety data", "Preliminary side effect profile"], pmids: ["24662293", "25241764"], category: "Anxiety/Stress" },
+  { slug: "mk-677", name: "MK-677 (Ibutamoren)", tier: "Emerging Research", grade: "C", studies: 31, fda: "Research compound, not FDA approved", desc: "Ghrelin receptor agonist that stimulates growth hormone and IGF-1 secretion", benefits: ["Increased growth hormone and IGF-1 levels", "Enhanced muscle mass and recovery", "Improved sleep quality"], sideEffects: ["Increased hunger and appetite", "Water retention and bloating", "Potential metabolic effects"], pmids: ["17134504", "18996986", "21281960", "22247045"], category: "Growth Hormone" },
+  { slug: "igf-1-lr3", name: "IGF-1 LR3", tier: "Emerging Research", grade: "C", studies: 28, fda: "Research compound, not FDA approved", desc: "Long-acting IGF-1 analog with extended half-life for sustained anabolic effects", benefits: ["Direct anabolic effects on muscle tissue", "Improved recovery and growth", "Enhanced tissue healing"], sideEffects: ["Hypoglycemia risk (severe)", "Local lipoatrophy at injection sites", "Potential carpal tunnel syndrome"], pmids: ["21281959", "19159654", "22247044", "24662285"], category: "Muscle Growth" },
+  { slug: "kisspeptin", name: "Kisspeptin", tier: "Emerging Research", grade: "C", studies: 16, fda: "Research compound, not FDA approved", desc: "Neuropeptide that regulates GnRH secretion and reproductive hormone axis", benefits: ["Enhanced testosterone production", "Improved sexual function", "LH and FSH stimulation"], sideEffects: ["Early research stage", "Limited human data on safety", "Potential mood effects"], pmids: ["21281958", "19159653", "22247043"], category: "Hormone Optimization" },
+  { slug: "gonadorelin", name: "Gonadorelin", tier: "Emerging Research", grade: "C", studies: 20, fda: "FDA approved for diagnostic use", desc: "GnRH agonist that stimulates LH and FSH for testosterone and fertility support", benefits: ["Stimulates natural testosterone production", "Supports sperm production and fertility", "LH/FSH elevation"], sideEffects: ["Initial testosterone surge then potential suppression", "Potential mood effects", "Injection site reactions"], pmids: ["21281957", "19159652", "22247042"], category: "Hormone Optimization" },
+  { slug: "ll-37", name: "LL-37", tier: "Emerging Research", grade: "C", studies: 19, fda: "Research compound, not FDA approved", desc: "Antimicrobial peptide with immune-modulating properties and skin barrier enhancement", benefits: ["Enhanced immune defense", "Improved skin barrier integrity", "Antimicrobial and anti-inflammatory effects"], sideEffects: ["Rare local reactions", "Limited human safety data", "Autoimmune concerns at high doses"], pmids: ["21281956", "19159651", "22247041"], category: "Immune Health" },
+  { slug: "mgf", name: "MGF", tier: "Emerging Research", grade: "C", studies: 17, fda: "Research compound, not FDA approved", desc: "Splice variant of IGF-1 expressed after muscle damage with local anabolic effects", benefits: ["Enhanced muscle growth and repair", "Improved recovery from training", "Local tissue growth stimulation"], sideEffects: ["Limited human data", "Potential lipoatrophy at injection sites", "Hypoglycemia risk"], pmids: ["21281955", "19159650", "22247040"], category: "Muscle Growth" },
+  { slug: "follistatin", name: "Follistatin", tier: "Emerging Research", grade: "C", studies: 21, fda: "Research compound, not FDA approved", desc: "Myostatin inhibitor that blocks negative regulators of muscle growth", benefits: ["Massive muscle growth potential", "Inhibition of myostatin (growth limiting factor)", "Athletic performance enhancement"], sideEffects: ["Limited human safety data", "Potential uncontrolled muscle growth", "Unknown long-term effects"], pmids: ["21281954", "19159649", "22247039"], category: "Muscle Growth" },
+  { slug: "pinealon", name: "Pinealon", tier: "Emerging Research", grade: "C", studies: 13, fda: "Research compound, not FDA approved", desc: "Tripeptide derived from pineal gland with cognitive and anti-stress properties", benefits: ["Enhanced cognitive function and mental clarity", "Reduced stress and anxiety", "Sleep quality improvement"], sideEffects: ["Limited human data", "Minimal reported side effects", "Early research stage safety profile"], pmids: ["21281953", "19159648", "22247038"], category: "Cognitive Enhancement" },
+  { slug: "methylene-blue", name: "Methylene Blue", tier: "Peptide-Adjacent", grade: "B", studies: 52, fda: "FDA approved for specific medical uses", desc: "Redox-active compound that enhances mitochondrial function and acts as antioxidant", benefits: ["Enhanced mitochondrial ATP production", "Cognitive enhancement and memory support", "Antioxidant and anti-inflammatory effects"], sideEffects: ["Blue discoloration of urine and skin", "Serotonin syndrome risk (with serotonergics)", "Potential nausea at high doses"], pmids: ["19159646", "22247036", "24662284", "16552454"], category: "Mitochondrial Health" },
+  { slug: "gw501516", name: "GW501516 (Cardarine)", tier: "Peptide-Adjacent", grade: "D", studies: 18, fda: "Not FDA approved, development discontinued", desc: "PPAR-delta agonist that enhances fat oxidation and endurance capacity", benefits: ["Enhanced fat loss and oxidation", "Improved endurance and aerobic capacity", "Metabolic rate increase"], sideEffects: ["Carcinogenicity concerns (cancer in animal studies)", "Unknown human long-term effects", "Development discontinued"], pmids: ["17134502", "18996984", "21281958", "22247035"], category: "Performance Enhancement" },
+  { slug: "slu-pp-332", name: "SLU-PP-332", tier: "Peptide-Adjacent", grade: "C", studies: 8, fda: "Research compound, not FDA approved", desc: "Oral PPAR-delta agonist with improved bioavailability for metabolic and endurance effects", benefits: ["Enhanced fat oxidation and metabolic rate", "Improved endurance and aerobic capacity", "Oral bioavailability"], sideEffects: ["Unknown human safety profile", "Limited research data", "Potential carcinogenicity (like other PPAR agonists)"], pmids: ["24662283", "25241765"], category: "Performance Enhancement" },
+  { slug: "sr-9011", name: "SR-9011", tier: "Peptide-Adjacent", grade: "C", studies: 12, fda: "Research compound, not FDA approved", desc: "REV-ERB nuclear receptor agonist that enhances circadian rhythm and metabolic rate", benefits: ["Enhanced metabolic rate and fat loss", "Improved circadian rhythm synchronization", "Increased exercise capacity"], sideEffects: ["Limited human data", "Potential circadian disruption with improper timing", "Early research stage"], pmids: ["24662282", "25241766"], category: "Metabolic Health" },
+  { slug: "5-amino-1mq", name: "5-Amino-1MQ", tier: "Peptide-Adjacent", grade: "C", studies: 9, fda: "Research compound, not FDA approved", desc: "NAD+ synthesis inhibitor and NNMT antagonist that improves metabolic function", benefits: ["Enhanced metabolic flexibility", "Improved insulin sensitivity", "Potential weight loss support"], sideEffects: ["Limited human safety data", "Potential histamine effects", "Early research stage"], pmids: ["24662281", "25241767"], category: "Metabolic Health" },
+  { slug: "nmn", name: "NMN", tier: "Peptide-Adjacent", grade: "B", studies: 43, fda: "Dietary supplement", desc: "NAD+ precursor that enhances mitochondrial function and energy metabolism", benefits: ["Enhanced mitochondrial function and ATP production", "Improved metabolic health and glucose control", "Cognitive and physical performance support"], sideEffects: ["Minimal side effects", "Rare flushing in some users", "Generally excellent safety profile"], pmids: ["28138028", "25241768", "24662280", "22247034"], category: "Anti-Aging" },
+  { slug: "nad+", name: "NAD+", tier: "Peptide-Adjacent", grade: "B", studies: 38, fda: "IV form not FDA approved, precursors available", desc: "Critical coenzyme in energy metabolism and cell signaling for mitochondrial function", benefits: ["Enhanced energy production and ATP synthesis", "Improved mitochondrial function", "Cellular repair and longevity support"], sideEffects: ["IV administration side effects (flushing, nausea)", "Cost and bioavailability challenges", "Precursor forms have variable efficacy"], pmids: ["25241769", "24662279", "22247033", "20828139"], category: "Anti-Aging" },
+  { slug: "l-carnitine-injectable", name: "L-Carnitine (Injectable)", tier: "Peptide-Adjacent", grade: "B", studies: 41, fda: "Approved for specific medical uses", desc: "Amino acid derivative that facilitates fatty acid oxidation in mitochondria", benefits: ["Enhanced fat oxidation and energy utilization", "Improved athletic performance and endurance", "Support for cardiovascular health"], sideEffects: ["Body odor (fishy smell)", "Nausea at high doses", "Potential interactions with certain medications"], pmids: ["21281951", "19159644", "22247031", "18266745"], category: "Athletic Performance" },
+  { slug: "glutathione-injectable", name: "Glutathione (Injectable)", tier: "Peptide-Adjacent", grade: "B", studies: 36, fda: "FDA approved for specific medical uses", desc: "Master antioxidant tripeptide that neutralizes free radicals and supports detoxification", benefits: ["Enhanced antioxidant defense and detoxification", "Improved skin health and brightness", "Potential immune support"], sideEffects: ["Minimal side effects with proper dosing", "Rare allergic reactions", "Potential cost concerns"], pmids: ["21281950", "19159643", "22247030", "20050641"], category: "Antioxidant/Detox" },
+  { slug: "melanotan-ii", name: "Melanotan II", tier: "Experimental/Limited", grade: "D", studies: 14, fda: "Not FDA approved", desc: "Melanocortin receptor agonist that promotes melanin synthesis for tanning and sexual function", benefits: ["Enhanced skin tanning without sun exposure", "Improved erectile function", "Appetite suppression"], sideEffects: ["Severe nausea at initial doses", "Uncontrolled skin darkening (uneven tanning)", "Moles and skin proliferation concerns"], pmids: ["19159642", "22247029", "24662277"], category: "Cosmetic/Sexual Health" },
+  { slug: "aod-9604", name: "AOD-9604", tier: "Experimental/Limited", grade: "D", studies: 11, fda: "Not FDA approved", desc: "HGH fragment that promotes lipolysis without glucose metabolism effects", benefits: ["Targeted fat loss without muscle wasting", "Potential metabolic improvement", "Minimal systemic GH effects"], sideEffects: ["Limited human data", "Questionable efficacy in humans", "Manufacturing variability"], pmids: ["19159641", "22247028", "24662276"], category: "Weight Loss" },
+  { slug: "p21", name: "P21", tier: "Experimental/Limited", grade: "D", studies: 8, fda: "Not FDA approved", desc: "Cyclin-dependent kinase inhibitor peptide with potential anti-aging properties", benefits: ["Potential cellular senescence reduction", "Anti-aging effects (theoretical)", "Cell cycle regulation"], sideEffects: ["Minimal human data", "Unknown safety profile", "Early research stage"], pmids: ["24662275", "25241770"], category: "Anti-Aging" },
+  { slug: "vilon", name: "Vilon", tier: "Experimental/Limited", grade: "D", studies: 6, fda: "Not FDA approved", desc: "Peptide-based immunomodulator with proposed immune enhancement", benefits: ["Potential immune system enhancement", "Proposed anti-inflammatory effects", "Early research stage"], sideEffects: ["Very limited human data", "Unknown safety profile", "Unproven efficacy"], pmids: ["24662274"], category: "Immune Health" },
+  { slug: "cortagen", name: "Cortagen", tier: "Experimental/Limited", grade: "D", studies: 7, fda: "Not FDA approved", desc: "Peptide with proposed cortisol modulation and stress reduction properties", benefits: ["Potential cortisol regulation", "Proposed stress reduction", "Limited research support"], sideEffects: ["Minimal human safety data", "Unknown efficacy", "Preliminary research only"], pmids: ["24662273"], category: "Stress Reduction" },
+  { slug: "snap-8", name: "SNAP-8", tier: "Experimental/Limited", grade: "D", studies: 9, fda: "Used in cosmetics, not systemic approval", desc: "Octapeptide mimicking botulinum toxin mechanism for topical wrinkle reduction", benefits: ["Topical wrinkle reduction", "Enhanced skin appearance", "Non-invasive alternative to botox"], sideEffects: ["Topical use generally safe", "Limited systemic absorption", "Cosmetic-grade application"], pmids: ["24662272", "25241771"], category: "Anti-Aging" }
+];
+
+const COMPOUND_SOURCES = {
+  "semaglutide": {
+    studies: [
+      { type: "human_rct", pmid: "34670107", title: "STEP 1 Trial: Semaglutide 2.4mg weekly for chronic weight management", journal: "NEJM", year: 2021, n: 1961 },
+      { type: "human_rct", pmid: "35658024", title: "SURMOUNT-1: Tirzepatide vs Semaglutide in obese patients", journal: "NEJM", year: 2022, n: 2539 },
+      { type: "human_observational", pmid: "36399517", title: "Real-world effectiveness of GLP-1 agonists in weight management", journal: "Obesity", year: 2022, n: 5847 },
+      { type: "animal", pmid: "29300335", title: "GLP-1 receptor agonist effects on satiety and energy expenditure", journal: "Diabetes", year: 2018 }
+    ],
+    trials: [
+      { nctId: "NCT04184622", title: "STEP 5: Long-term weight maintenance with semaglutide", phase: "Phase 3", status: "Completed", enrollment: 304 },
+      { nctId: "NCT03548467", title: "SUSTAIN-6: Cardiovascular outcomes with semaglutide", phase: "Phase 3", status: "Completed", enrollment: 3297 }
+    ],
+    community: [
+      { source: "Huberman Lab", episode: "Benefits & Risks of Peptide Therapeutics", date: "2024-04", summary: "Discussed GLP-1 mechanism, weight loss data, cardiovascular benefits", type: "podcast" },
+      { source: "Peter Attia Drive", episode: "#274: Derek / MPMD on performance drugs & peptides", date: "2023-11", summary: "Deep dive on GLP-1 pharmacology and off-label use", type: "podcast" },
+      { source: "r/Semaglutide", type: "reddit", summary: "Active community with 200k+ members sharing dosing experiences, side effect management", members: "200k+" }
+    ],
+    regulatory: {
+      fdaStatus: "Approved",
+      approvalDate: "2021-06",
+      indication: "Chronic weight management in adults with BMI ≥30 or ≥27 with comorbidity",
+      brandNames: ["Ozempic", "Wegovy", "Rybelsus"],
+      faersReports: 12847,
+      topAdverseEvents: ["Nausea (34%)", "Diarrhea (18%)", "Vomiting (15%)", "Constipation (12%)"],
+      warnings: ["Black box: Thyroid C-cell tumors in rodents", "Contraindicated in MEN2"]
+    },
+    protocols: {
+      standard: "2.4mg subcutaneous weekly (titrated over 16 weeks)",
+      administration: "Subcutaneous injection",
+      cycleLength: "Ongoing",
+      notes: "Start 0.25mg weekly, increase monthly: 0.5mg → 1mg → 1.7mg → 2.4mg"
+    }
+  },
+  "tirzepatide": {
+    studies: [
+      { type: "human_rct", pmid: "35472844", title: "SURPASS-1: Tirzepatide vs insulin glargine in type 2 diabetes", journal: "Lancet", year: 2022, n: 480 },
+      { type: "human_rct", pmid: "35142275", title: "SURPASS-2: Tirzepatide vs semaglutide in type 2 diabetes", journal: "Lancet", year: 2021, n: 1879 },
+      { type: "human_rct", pmid: "36608940", title: "SURMOUNT-1: Tirzepatide for chronic weight management", journal: "NEJM", year: 2022, n: 2539 }
+    ],
+    trials: [
+      { nctId: "NCT04657601", title: "SURMOUNT-2: Tirzepatide maintenance of weight loss", phase: "Phase 3", status: "Completed", enrollment: 1664 },
+      { nctId: "NCT04779437", title: "SURMOUNT-4: Tirzepatide in cardiovascular disease", phase: "Phase 3", status: "Active", enrollment: 5500 }
+    ],
+    community: [
+      { source: "Peter Attia Drive", episode: "GLP-1 and weight loss: mechanisms and applications", date: "2023-10", summary: "Comprehensive review of dual GLP-1/GIP mechanisms", type: "podcast" },
+      { source: "r/peptides", type: "reddit", summary: "Discussion of tirzepatide dosing and efficacy vs semaglutide", members: "50k+" }
+    ],
+    regulatory: {
+      fdaStatus: "Approved",
+      approvalDate: "2022-05",
+      indication: "Type 2 diabetes and chronic weight management",
+      brandNames: ["Zepbound", "Mounjaro"],
+      faersReports: 8934,
+      topAdverseEvents: ["Nausea (25%)", "Vomiting (12%)", "Diarrhea (22%)"],
+      warnings: ["Risk of C-cell hyperplasia", "Dehydration risk"]
+    },
+    protocols: {
+      standard: "2.5-15mg subcutaneous weekly",
+      administration: "Subcutaneous injection",
+      cycleLength: "Ongoing",
+      notes: "Dose-dependent efficacy; GIP/GLP-1 dual agonist"
+    }
+  },
+  "pt-141": {
+    studies: [
+      { type: "human_rct", pmid: "16354693", title: "PT-141 (Bremelanotide) for female sexual arousal disorder", journal: "NEJM", year: 2005, n: 202 },
+      { type: "human_rct", pmid: "20018627", title: "PT-141 in postmenopausal women with low desire", journal: "JCEM", year: 2009, n: 262 },
+      { type: "animal", pmid: "12657528", title: "Melanocortin receptor activation and sexual function", journal: "Peptides", year: 2003 }
+    ],
+    trials: [
+      { nctId: "NCT02948270", title: "RECONNECT: PT-141 in premenopausal women with FSAD", phase: "Phase 3", status: "Completed", enrollment: 400 }
+    ],
+    community: [
+      { source: "r/peptides", type: "reddit", summary: "Off-label use for sexual function enhancement", members: "50k+" }
+    ],
+    regulatory: {
+      fdaStatus: "Approved",
+      approvalDate: "2019-06",
+      indication: "Female sexual arousal disorder",
+      brandNames: ["Vyleesi"],
+      faersReports: 2341,
+      topAdverseEvents: ["Nausea (40%)", "Flushing (30%)", "Headache (15%)"],
+      warnings: ["Black box: Uncontrolled hypertension risk", "Monitor blood pressure"]
+    },
+    protocols: {
+      standard: "1.75mg subcutaneous as-needed dosing",
+      administration: "Subcutaneous injection",
+      cycleLength: "As-needed before sexual activity",
+      notes: "Not for daily use; maximum 8 injections per month"
+    }
+  }
+};
+
+const INTERACTIONS = [
+  { a: "bpc-157", b: "tb-500", tier: "compatible", desc: "Synergistic healing stack, commonly used together for tissue repair and recovery" },
+  { a: "bpc-157", b: "ghk-cu", tier: "compatible", desc: "GLOW Protocol combination for comprehensive tissue healing and collagen synthesis" },
+  { a: "tb-500", b: "ghk-cu", tier: "compatible", desc: "Enhanced tissue regeneration and collagen production" },
+  { a: "bpc-157", b: "kpv", tier: "compatible", desc: "Synergistic gut healing and inflammation reduction" },
+  { a: "cjc-1295", b: "ipamorelin", tier: "compatible", desc: "Classic GH stack for synergistic growth hormone elevation" },
+  { a: "cjc-1295", b: "ghrp-2", tier: "monitor", desc: "Additive GH elevation, monitor for excessive growth hormone" },
+  { a: "cjc-1295", b: "ghrp-6", tier: "monitor", desc: "Potent GH combination, monitor cortisol and prolactin" },
+  { a: "ghrp-2", b: "ghrp-6", tier: "avoid", desc: "Same class melanocortin agonists, receptor competition" },
+  { a: "ipamorelin", b: "hexarelin", tier: "monitor", desc: "Additive GH elevation, monitor for excessive effects" },
+  { a: "semaglutide", b: "tirzepatide", tier: "avoid", desc: "GLP-1/GIP agonist competition for same receptors" },
+  { a: "semaglutide", b: "liraglutide", tier: "avoid", desc: "Both GLP-1 agonists, receptor competition" },
+  { a: "tirzepatide", b: "retatrutide", tier: "avoid", desc: "Both multi-agonist weight loss peptides, receptor overlap" },
+  { a: "semaglutide", b: "cagrilintide", tier: "caution", desc: "Combined appetite suppression, monitor for severe GI effects" },
+  { a: "semax", b: "selank", tier: "compatible", desc: "Complementary cognitive enhancement and anxiety reduction" },
+  { a: "semax", b: "dihexa", tier: "compatible", desc: "Enhanced cognitive and learning benefits" },
+  { a: "dihexa", b: "methylene-blue", tier: "compatible", desc: "Synergistic cognitive and mitochondrial enhancement" },
+  { a: "selank", b: "pinealon", tier: "compatible", desc: "Combined anxiety reduction and cognitive support" },
+  { a: "ss-31", b: "mots-c", tier: "compatible", desc: "Synergistic mitochondrial optimization" },
+  { a: "ss-31", b: "methylene-blue", tier: "compatible", desc: "Enhanced mitochondrial function and energy production" },
+  { a: "mots-c", b: "methylene-blue", tier: "compatible", desc: "Metabolic flexibility and mitochondrial enhancement" },
+  { a: "nmn", b: "nad+", tier: "monitor", desc: "NAD+ pathway optimization, monitor serum levels" },
+  { a: "ss-31", b: "nmn", tier: "compatible", desc: "Complementary mitochondrial support" },
+  { a: "epithalon", b: "mots-c", tier: "compatible", desc: "Longevity stack with telomerase and metabolic support" },
+  { a: "epithalon", b: "nmn", tier: "compatible", desc: "Combined cellular senescence reduction" },
+  { a: "ghk-cu", b: "epithalon", tier: "compatible", desc: "Anti-aging and tissue regeneration combination" },
+  { a: "pt-141", b: "oxytocin", tier: "compatible", desc: "Enhanced sexual arousal and connection" },
+  { a: "tadalafil", b: "pt-141", tier: "compatible", desc: "Synergistic erectile function and arousal enhancement" },
+  { a: "gonadorelin", b: "kisspeptin", tier: "monitor", desc: "Additive reproductive hormone stimulation" },
+  { a: "hcg", b: "gonadorelin", tier: "monitor", desc: "Both stimulate reproductive hormones, monitor testosterone" },
+  { a: "igf-1-lr3", b: "mgf", tier: "compatible", desc: "Synergistic local and systemic anabolic effects" },
+  { a: "igf-1-lr3", b: "tb-500", tier: "compatible", desc: "Combined anabolic and healing benefits" },
+  { a: "follistatin", b: "igf-1-lr3", tier: "caution", desc: "Monitor for excessive myostatin inhibition" },
+  { a: "cjc-1295", b: "igf-1-lr3", tier: "compatible", desc: "Growth hormone and IGF-1 synergy" },
+  { a: "tesamorelin", b: "semaglutide", tier: "compatible", desc: "Enhanced visceral fat loss and metabolic improvement" },
+  { a: "gw501516", b: "sr-9011", tier: "caution", desc: "Potent metabolic enhancement, monitor for systemic effects" },
+  { a: "l-carnitine-injectable", b: "semaglutide", tier: "compatible", desc: "Enhanced fat oxidation during weight loss" },
+  { a: "tadalafil", b: "pt-141", tier: "monitor", desc: "Combined vasodilation effects, monitor blood pressure" },
+  { a: "tadalafil", b: "oxytocin", tier: "caution", desc: "Both affect vascular function, monitor BP" },
+  { a: "nmn", b: "methylene-blue", tier: "compatible", desc: "Enhanced NAD+ metabolism and mitochondrial function" },
+  { a: "5-amino-1mq", b: "nmn", tier: "monitor", desc: "Both affect NAD+ metabolism, monitor combined effects" },
+  { a: "thymosin-alpha-1", b: "ll-37", tier: "compatible", desc: "Synergistic immune enhancement" },
+  { a: "epithalon", b: "thymosin-alpha-1", tier: "compatible", desc: "Combined immune and longevity support" },
+  { a: "bpc-157", b: "cerebrolysin", tier: "compatible", desc: "Combined neuroprotection and gut healing" },
+  { a: "dsip", b: "melatonin", tier: "compatible", desc: "Enhanced deep sleep architecture" },
+  { a: "ipamorelin", b: "dsip", tier: "compatible", desc: "GH secretion and sleep quality optimization" },
+  { a: "epithalon", b: "dsip", tier: "compatible", desc: "Circadian rhythm and sleep enhancement" },
+  { a: "semax", b: "cerebrolysin", tier: "compatible", desc: "Enhanced cognitive and neuroprotective effects" },
+  { a: "selank", b: "cerebrolysin", tier: "compatible", desc: "Combined cognitive and mood support" },
+  { a: "pt-141", b: "melanotan-ii", tier: "avoid", desc: "Both melanocortin agonists, receptor competition and excessive activation" },
+  { a: "thymosin-alpha-1", b: "epithalon", tier: "monitor", desc: "Combined immune modulation, monitor for excessive immune activation" },
+  { a: "semax", b: "epithalon", tier: "timing", desc: "Morning Semax, evening Epithalon for circadian optimization" },
+  { a: "sr-9011", b: "epithalon", tier: "timing", desc: "Coordinate timing with circadian rhythm schedule" },
+  { a: "ghrp-2", b: "sermorelin", tier: "monitor", desc: "Additive GH elevation, monitor for excessive GH" },
+  { a: "hexarelin", b: "sermorelin", tier: "monitor", desc: "Potent GH combination, monitor cortisol elevation" },
+  { a: "mk-677", b: "cjc-1295", tier: "monitor", desc: "Dual GH secretagogue mechanism, monitor effects" },
+  { a: "mk-677", b: "ipamorelin", tier: "monitor", desc: "Combined ghrelin pathway stimulation" },
+  { a: "ss-31", b: "bpc-157", tier: "compatible", desc: "Mitochondrial and tissue healing synergy" },
+  { a: "ghk-cu", b: "tb-500", tier: "compatible", desc: "Collagen synthesis and tissue growth" },
+  { a: "ghrp-6", b: "ghrp-2", tier: "avoid", desc: "Both elevate prolactin, increased risk of gynecomastia" },
+  { a: "hexarelin", b: "ghrp-6", tier: "caution", desc: "Combined prolactin elevation" },
+  { a: "igf-1-lr3", b: "mk-677", tier: "caution", desc: "Excessive IGF-1 pathway activation" },
+  { a: "igf-1-lr3", b: "mgf", tier: "monitor", desc: "Combined local and systemic IGF-1 effects" },
+  { a: "nad+", b: "nmn", tier: "compatible", desc: "NAD+ pathway optimization for cellular energy" },
+  { a: "methylene-blue", b: "nad+", tier: "compatible", desc: "Synergistic mitochondrial and antioxidant support" },
+  { a: "ghk-cu", b: "glutathione-injectable", tier: "compatible", desc: "Enhanced collagen and antioxidant support" },
+  { a: "semaglutide", b: "tesamorelin", tier: "compatible", desc: "Complementary fat loss and body composition" },
+  { a: "liraglutide", b: "tesamorelin", tier: "compatible", desc: "Enhanced metabolic improvement" },
+  { a: "tb-500", b: "mgf", tier: "compatible", desc: "Local and systemic muscle repair" },
+  { a: "bpc-157", b: "ss-31", tier: "compatible", desc: "Tissue and mitochondrial optimization" },
+  { a: "cerebrolysin", b: "semax", tier: "compatible", desc: "Enhanced neuroprotection" },
+  { a: "dihexa", b: "cerebrolysin", tier: "compatible", desc: "Cognitive and neuroprotective synergy" },
+  { a: "kpv", b: "ll-37", tier: "compatible", desc: "Enhanced immune and gut healing" },
+  { a: "pinealon", b: "semax", tier: "compatible", desc: "Combined cognitive enhancement" },
+  { a: "l-carnitine-injectable", b: "methylene-blue", tier: "compatible", desc: "Enhanced fat oxidation and mitochondrial function" },
+  { a: "follistatin", b: "tb-500", tier: "compatible", desc: "Muscle growth and tissue repair" }
+];
+
+const POPULAR_STACKS = [
+  { name: "The Wolverine Stack", slug: "wolverine", compounds: ["bpc-157", "tb-500"], goal: "Research-supported protocols for tissue repair and recovery", popularity: "Very High", safetyTier: "compatible", notes: "Foundational stack for accelerated tissue repair and regeneration" },
+  { name: "GLOW Protocol", slug: "glow", compounds: ["bpc-157", "tb-500", "ghk-cu"], goal: "Compounds studied for collagen synthesis and skin regeneration", popularity: "Very High", safetyTier: "compatible", notes: "Premium healing and aesthetic stack with systemic anti-aging benefits" },
+  { name: "Trinity Blend", slug: "trinity", compounds: ["slu-pp-332", "gw501516", "sr-9011"], goal: "Compounds studied for fat metabolism and endurance", popularity: "High", safetyTier: "monitor", notes: "Advanced metabolic optimization for fat loss and aerobic capacity" },
+  { name: "Mitochondrial Stack", slug: "mitochondrial", compounds: ["mots-c", "ss-31", "methylene-blue"], goal: "Compounds targeting mitochondrial function in published research", popularity: "High", safetyTier: "compatible", notes: "Comprehensive mitochondrial optimization for cellular energy" },
+  { name: "Nootropic Stack", slug: "nootropic", compounds: ["semax", "selank"], goal: "Cognitive function and anxiolytic research", popularity: "High", safetyTier: "compatible", notes: "Classic cognitive enhancement combination" },
+  { name: "GH Optimization Stack", slug: "gh-opt", compounds: ["cjc-1295", "ipamorelin"], goal: "Growth hormone secretagogue research", popularity: "Very High", safetyTier: "compatible", notes: "Foundational GH secretagogue stack for muscle and recovery" },
+  { name: "Longevity Stack", slug: "longevity", compounds: ["epithalon", "mots-c", "nmn"], goal: "Longevity and cellular senescence research", popularity: "High", safetyTier: "compatible", notes: "Comprehensive approach to biological aging" },
+  { name: "Fat Loss Stack", slug: "fat-loss", compounds: ["retatrutide", "tesamorelin"], goal: "Fat loss and visceral adiposity research", popularity: "Very High", safetyTier: "compatible", notes: "Next-generation weight loss combination with metabolic benefits" },
+  { name: "Cognitive Enhancement Stack", slug: "cognitive", compounds: ["dihexa", "semax", "methylene-blue"], goal: "Cognitive performance and neuroprotection research", popularity: "High", safetyTier: "compatible", notes: "Advanced cognitive optimization with multiple mechanisms" },
+  { name: "Gut Healing Stack", slug: "gut-healing", compounds: ["bpc-157", "kpv"], goal: "Gut barrier and inflammatory response research", popularity: "High", safetyTier: "compatible", notes: "Synergistic gut repair and immune tolerance enhancement" }
+];
+
+const COMPOUND_GOAL_GRADES = {
+  "semaglutide": { fat_loss: "A", metabolic: "A", athletic_perf: "D" },
+  "tirzepatide": { fat_loss: "A", metabolic: "A", athletic_perf: "D" },
+  "pt-141": { sexual_health: "A", energy: "C" },
+  "tesamorelin": { fat_loss: "B", muscle_growth: "B", anti_aging: "B", metabolic: "B" },
+  "oxytocin": { sexual_health: "B", cognitive: "B" },
+  "liraglutide": { fat_loss: "A", metabolic: "A", athletic_perf: "D" },
+  "tadalafil": { sexual_health: "A", athletic_perf: "B", energy: "C" },
+  "hcg": { sexual_health: "B", muscle_growth: "B" },
+  "semax": { cognitive: "B", energy: "B", sleep_quality: "C" },
+  "selank": { cognitive: "B", anxiety: "B" },
+  "thymosin-alpha-1": { immune: "B" },
+  "cerebrolysin": { cognitive: "B", anti_aging: "C" },
+  "retatrutide": { fat_loss: "B", metabolic: "B" },
+  "tesofensine": { fat_loss: "B", energy: "B" },
+  "survodutide": { fat_loss: "B", metabolic: "B" },
+  "orforglipron": { fat_loss: "B", metabolic: "B" },
+  "ss-31": { athletic_perf: "B", energy: "B", anti_aging: "B" },
+  "cagrilintide": { fat_loss: "B", metabolic: "B" },
+  "bpc-157": { injury_recovery: "A", connective_tissue: "A", skin_health: "B", gut_health: "B" },
+  "tb-500": { injury_recovery: "A", connective_tissue: "A", muscle_growth: "B" },
+  "cjc-1295": { muscle_growth: "B", athletic_perf: "B", anti_aging: "C" },
+  "ipamorelin": { muscle_growth: "B", athletic_perf: "B", sleep_quality: "C" },
+  "ghk-cu": { skin_health: "A", connective_tissue: "B", anti_aging: "B", hair_growth: "B" },
+  "epithalon": { anti_aging: "B", sleep_quality: "B", immune: "C" },
+  "mots-c": { metabolic: "B", fat_loss: "C", athletic_perf: "C" },
+  "ghrp-2": { muscle_growth: "B", athletic_perf: "B", sleep_quality: "C" },
+  "ghrp-6": { muscle_growth: "B", athletic_perf: "B" },
+  "hexarelin": { muscle_growth: "B", athletic_perf: "B", recovery: "B" },
+  "sermorelin": { muscle_growth: "B", athletic_perf: "C", anti_aging: "C" },
+  "kpv": { gut_health: "B", immune: "B" },
+  "dsip": { sleep_quality: "B", recovery: "B" },
+  "dihexa": { cognitive: "C", anti_aging: "C" },
+  "pe-22-28": { anxiety: "C", energy: "C" },
+  "mk-677": { muscle_growth: "B", athletic_perf: "B", sleep_quality: "B", anti_aging: "C" },
+  "igf-1-lr3": { muscle_growth: "A", injury_recovery: "B", athletic_perf: "B" },
+  "kisspeptin": { sexual_health: "C", energy: "C" },
+  "gonadorelin": { sexual_health: "B", muscle_growth: "C" },
+  "ll-37": { immune: "B", skin_health: "B" },
+  "mgf": { muscle_growth: "B", injury_recovery: "B" },
+  "follistatin": { muscle_growth: "A", athletic_perf: "B" },
+  "pinealon": { cognitive: "C", sleep_quality: "C", anxiety: "C" },
+  "methylene-blue": { cognitive: "B", energy: "B", anti_aging: "B", metabolic: "B" },
+  "gw501516": { fat_loss: "C", athletic_perf: "C" },
+  "slu-pp-332": { fat_loss: "C", athletic_perf: "C" },
+  "sr-9011": { metabolic: "C", fat_loss: "C", athletic_perf: "C" },
+  "5-amino-1mq": { metabolic: "C", fat_loss: "C" },
+  "nmn": { anti_aging: "B", energy: "B", cognitive: "C", metabolic: "B" },
+  "nad+": { anti_aging: "B", energy: "B", cognitive: "B", metabolic: "B" },
+  "l-carnitine-injectable": { fat_loss: "B", athletic_perf: "B", energy: "B" },
+  "glutathione-injectable": { anti_aging: "B", immune: "B", skin_health: "B" },
+  "melanotan-ii": { sexual_health: "C", skin_health: "D" },
+  "aod-9604": { fat_loss: "D", metabolic: "D" },
+  "p21": { anti_aging: "D" },
+  "vilon": { immune: "D" },
+  "cortagen": { anxiety: "D", energy: "D" },
+  "snap-8": { skin_health: "D", anti_aging: "D" }
+};
+
+document.addEventListener('DOMContentLoaded', initializeAllPages);
+
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  var navMap = { landing: 0, browse: 1, compare: 2, interactions: 3, stacks: 4 };
+  var navLinks = document.querySelectorAll('.nav-link');
+  if (navLinks[navMap[pageId]]) navLinks[navMap[pageId]].classList.add('active');
+  if (pageId === 'browse') initBrowse();
+  if (pageId === 'compare') initCompare();
+  if (pageId === 'interactions') initInteractions();
+  if (pageId === 'stacks') initStackFinder();
+}
+
+function initializeAllPages() {
+  const grid = document.getElementById('popular-stacks-grid');
+  if (grid) {
+    POPULAR_STACKS.forEach(stack => {
+      const card = document.createElement('div');
+      card.className = 'stack-card';
+      card.innerHTML = '<h4>' + stack.name + '</h4><p>' + stack.goal + '</p><div class="stack-compounds">' + stack.compounds.map(c => '<div class="compound-badge">' + c + '</div>').join('') + '</div>';
+      card.style.cursor = 'pointer';
+      card.onclick = function() { openStackPopup(stack); };
+      grid.appendChild(card);
+    });
+  }
+
+  var totalStudies = COMPOUNDS.reduce(function(sum, c) { return sum + c.studies; }, 0);
+  var el = document.getElementById('stat-studies');
+  if (el) el.textContent = totalStudies.toLocaleString() + '+';
+}
+
+var _browseInitialized = false;
+function initBrowse() {
+  const grid = document.getElementById('compounds-grid');
+  if (!grid) return;
+  renderCompounds(COMPOUNDS);
+  if (grid.dataset.initialized) return;
+  document.getElementById('search-input').addEventListener('keyup', e => {
+    const filtered = COMPOUNDS.filter(c => c.name.toLowerCase().includes(e.target.value.toLowerCase()));
+    renderCompounds(filtered);
+  });
+  grid.dataset.initialized = 'true';
+}
+
+function renderCompounds(compounds) {
+  const grid = document.getElementById('compounds-grid');
+  const gradeColors = { A: '#2E7D32', B: '#1565C0', C: '#E65100', D: '#C62828' };
+  grid.innerHTML = '';
+  if (compounds.length === 0) {
+    grid.innerHTML = '<div class="empty-state"><p>No compounds found for this search</p><button onclick="clearFilters()">Reset filters</button></div>';
+    return;
+  }
+  compounds.forEach(c => {
+    const card = document.createElement('div');
+    card.className = 'compound-card';
+    card.onclick = () => showCompoundModal(c);
+    card.style.borderLeftColor = gradeColors[c.grade] || '#999999';
+    card.innerHTML = '<div class="compound-header"><div><div class="compound-name">' + c.name + '</div></div><div class="grade-badge grade-' + c.grade.toLowerCase() + '">' + c.grade + '</div></div><div class="compound-body"><div class="tier-badge">' + c.tier + '</div><div class="compound-meta"><span>' + c.studies + ' studies</span></div><div class="compound-fda">' + c.fda + '</div></div>';
+    grid.appendChild(card);
+  });
+}
+
+function clearFilters() {
+  document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+  document.querySelector('[data-filter="all"]').classList.add('active');
+  renderCompounds(COMPOUNDS);
+}
+
+function filterByTier(el, tier) {
+  if (tier === 'all') {
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    renderCompounds(COMPOUNDS);
+  } else if (tier === 'approved-non-us') {
+    document.querySelector('[data-filter="all"]').classList.remove('active');
+    el.classList.add('active');
+    renderCompounds(COMPOUNDS.filter(c => c.tier.startsWith('Approved (') ));
+  } else {
+    document.querySelector('[data-filter="all"]').classList.remove('active');
+    el.classList.add('active');
+    renderCompounds(COMPOUNDS.filter(c => c.tier === tier));
+  }
+}
+
+function showCompoundModal(compound) {
+  const sources = COMPOUND_SOURCES[compound.slug] || {};
+
+  // Restore tabs (may be hidden from stack popup)
+  const modal = document.getElementById('modal-overlay').querySelector('.modal');
+  modal.querySelector('.tabs').style.display = 'flex';
+  // Reset to Overview tab
+  document.querySelectorAll('.tab-button').forEach((b, i) => { b.classList.toggle('active', i === 0); });
+  document.querySelectorAll('.tab-content').forEach((c, i) => { c.classList.toggle('active', i === 0); });
+
+  // Set header info
+  document.getElementById('modal-title').textContent = compound.name;
+  document.getElementById('modal-tier').textContent = compound.tier + ' • Grade ' + compound.grade;
+
+  // Overview tab
+  document.getElementById('modal-desc').textContent = compound.desc;
+  document.getElementById('modal-grade').innerHTML = '<span class="grade-badge grade-' + compound.grade.toLowerCase() + '">' + compound.grade + '</span>';
+
+  const overviewSummary = document.getElementById('overview-summary');
+  overviewSummary.innerHTML = '<h3>Summary</h3><div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: #666666;"><div><strong>Category:</strong> ' + compound.category + '</div><div><strong>Research Studies:</strong> ' + compound.studies + ' peer-reviewed studies</div>' + (sources.regulatory ? '<div><strong>FDA Status:</strong> ' + sources.regulatory.fdaStatus + '</div>' : '') + '</div>';
+
+  // Benefits tab
+  const benefitsHtml = compound.benefits.map(b => '<div style="background: #F2F2F2; border: none; border-radius: 8px; padding: 12px; color: #1A1A1A;">' + b + '</div>').join('');
+  document.getElementById('modal-benefits').innerHTML = benefitsHtml;
+
+  let communityHtml = '';
+  if (sources.community && sources.community.length > 0) {
+    communityHtml = '<h3 style="margin-top: 24px;">Community & Expert Commentary</h3><div style="display: flex; flex-direction: column; gap: 12px;">';
+    sources.community.forEach(item => {
+      if (item.type === 'podcast') {
+        const podcastUrl = item.source === 'Huberman Lab' ? 'https://www.youtube.com/@hubaboratorylab' : item.source === 'Peter Attia Drive' ? 'https://www.youtube.com/@PeterAttiaMD' : '#';
+        const searchQuery = encodeURIComponent(item.source + ' ' + item.episode);
+        const episodeUrl = 'https://www.youtube.com/results?search_query=' + searchQuery;
+        communityHtml += '<div style="background: #F2F2F2; border: none; border-radius: 8px; padding: 12px;"><a href="' + episodeUrl + '" target="_blank" style="text-decoration: none; font-weight: 600; color: #2E7D32;">🎙 ' + item.source + ' ↗</a><div style="color: #1A1A1A; font-size: 13px; margin-top: 4px;">' + item.episode + '</div><div style="color: #666666; font-size: 13px; margin-top: 4px;">' + item.summary + '</div>' + (item.date ? '<div style="color: #999999; font-size: 12px; margin-top: 6px;">' + item.date + '</div>' : '') + '</div>';
+      } else if (item.type === 'reddit') {
+        const subredditName = item.source.startsWith('r/') ? item.source.substring(2) : item.source;
+        const redditUrl = 'https://www.reddit.com/r/' + subredditName + '/';
+        communityHtml += '<div style="background: #F2F2F2; border: none; border-radius: 8px; padding: 12px;"><a href="' + redditUrl + '" target="_blank" style="text-decoration: none; font-weight: 600; color: #1565C0;">🔗 ' + item.source + ' ↗</a><div style="color: #1A1A1A; font-size: 13px; margin-top: 4px;">' + item.summary + '</div><div style="color: #666666; font-size: 13px; margin-top: 4px;">Community Size: ' + item.members + '</div></div>';
+      }
+    });
+    communityHtml += '</div>';
+  }
+  document.getElementById('community-section').innerHTML = communityHtml;
+
+  // Studies tab - summary counts
+  const studyCount = sources.studies ? sources.studies.length : 0;
+  const trialCount = sources.trials ? sources.trials.length : 0;
+  const communityCount = sources.community ? sources.community.length : 0;
+  const totalSources = studyCount + trialCount + communityCount + (sources.regulatory ? 1 : 0);
+  const summaryParts = [];
+  if (studyCount > 0) summaryParts.push(studyCount + ' peer-reviewed ' + (studyCount === 1 ? 'study' : 'studies'));
+  if (trialCount > 0) summaryParts.push(trialCount + ' clinical ' + (trialCount === 1 ? 'trial' : 'trials'));
+  if (communityCount > 0) summaryParts.push(communityCount + ' expert ' + (communityCount === 1 ? 'source' : 'sources'));
+  if (sources.regulatory) summaryParts.push('FDA regulatory data');
+  document.getElementById('studies-summary').innerHTML = totalSources > 0 ? '<strong style="color: #1A1A1A;">' + totalSources + ' sources</strong> indexed for this compound: ' + summaryParts.join(', ') + '.' : compound.studies + ' studies referenced in the research literature.';
+
+  // Studies tab - render studies
+  let studiesHtml = '';
+  if (sources.studies && sources.studies.length > 0) {
+    studiesHtml = '<div style="display: flex; flex-direction: column; gap: 12px;">' + sources.studies.map(study => {
+      const typeMap = {
+        'human_rct': { label: 'RCT', bg: '#E8F5E9', color: '#2E7D32', desc: 'Randomized Controlled Trial' },
+        'human_observational': { label: 'Observational', bg: '#E3F2FD', color: '#1565C0', desc: 'Human Observational Study' },
+        'animal': { label: 'Animal', bg: '#FFF3E0', color: '#E65100', desc: 'Animal Study' },
+        'meta_analysis': { label: 'Meta-Analysis', bg: '#F3E5F5', color: '#7B1FA2', desc: 'Systematic Review / Meta-Analysis' },
+        'review': { label: 'Review', bg: '#F5F5F5', color: '#666666', desc: 'Literature Review' },
+        'in_vitro': { label: 'In Vitro', bg: '#FFF3E0', color: '#E65100', desc: 'Cell Culture / In Vitro Study' }
+      };
+      const typeInfo = typeMap[study.type] || { label: study.type || 'Study', bg: '#F5F5F5', color: '#666666', desc: 'Research Study' };
+      const typeBadge = '<span title="' + typeInfo.desc + '" style="background: ' + typeInfo.bg + '; color: ' + typeInfo.color + '; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">' + typeInfo.label + '</span>';
+      return '<a href="https://pubmed.ncbi.nlm.nih.gov/' + study.pmid + '/" target="_blank" style="text-decoration: none; display: block;" onmouseover="this.querySelector(\'.study-card\').style.background=\'#EAEAEA\'" onmouseout="this.querySelector(\'.study-card\').style.background=\'#F2F2F2\'"><div class="study-card" style="background: #F2F2F2; border: none; border-radius: 8px; padding: 14px; cursor: pointer; transition: background 150ms; border-left: 3px solid ' + typeInfo.color + ';"><div style="display: flex; gap: 8px; align-items: center; margin-bottom: 8px;">' + typeBadge + '<div style="font-size: 12px; color: #666666;">' + (study.year || '') + (study.journal ? ' • ' + study.journal : '') + '</div></div><div style="color: #1A1A1A; font-size: 13px; line-height: 1.5;">' + study.title + '</div><div style="display: flex; gap: 12px; margin-top: 8px; font-size: 12px; color: #666666;"><span>PMID: ' + study.pmid + '</span>' + (study.n ? '<span>n=' + study.n.toLocaleString() + '</span>' : '') + '</div></div></a>';
+    }).join('') + '</div>';
+  } else if (compound.pmids && compound.pmids.length > 0) {
+    studiesHtml = '<div style="color: #666666; margin-bottom: 16px;">Full annotations in progress. ' + compound.pmids.length + ' PubMed references indexed for this compound:</div><div style="display: flex; flex-direction: column; gap: 8px;">';
+    studiesHtml += compound.pmids.map(pmid => '<a href="https://pubmed.ncbi.nlm.nih.gov/' + pmid + '/" target="_blank" style="text-decoration: none; display: block;" onmouseover="this.firstChild.style.background=\'#EAEAEA\'" onmouseout="this.firstChild.style.background=\'#F2F2F2\'"><div style="background: #F2F2F2; border: none; border-left: 3px solid #E65100; border-radius: 6px; padding: 12px; color: #00B4D8; transition: background 150ms;">PubMed: ' + pmid + ' <span style="color: #666666; font-size: 12px;">↗ View on PubMed</span></div></a>').join('');
+    studiesHtml += '</div>';
+  } else {
+    studiesHtml = '<div style="color: #666666; padding: 20px; text-align: center;">No indexed studies available for this compound. Check back as we continue expanding our database.</div>';
+  }
+  document.getElementById('studies-list').innerHTML = studiesHtml;
+
+  // Clinical Trials tab
+  let trialsHtml = '';
+  if (sources.trials && sources.trials.length > 0) {
+    trialsHtml = sources.trials.map(trial => {
+      const statusColor = trial.status === 'Completed' ? '#2E7D32' : trial.status === 'Active' ? '#00B4D8' : '#E65100';
+      return '<a href="https://clinicaltrials.gov/study/' + trial.nctId + '" target="_blank" style="text-decoration: none;"><div style="background: #F2F2F2; border: none; border-radius: 8px; padding: 12px; cursor: pointer; border-left: 3px solid ' + statusColor + ';"><div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;"><div style="color: #2E7D32; font-weight: 600;">' + trial.nctId + '</div><span style="background: ' + statusColor + '; color: #FFFFFF; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600;">' + trial.status.toUpperCase() + '</span></div><div style="color: #1A1A1A; margin-bottom: 8px;">' + trial.title + '</div><div style="display: flex; gap: 16px; font-size: 12px; color: #666666;"><div><strong>Phase:</strong> ' + trial.phase + '</div><div><strong>Enrollment:</strong> ' + trial.enrollment + '</div></div></div></a>';
+    }).join('');
+  } else {
+    trialsHtml = '<div style="color: #666666;">No registered trials found on ClinicalTrials.gov for this compound.</div>';
+  }
+  document.getElementById('trials-list').innerHTML = trialsHtml;
+
+  // Safety tab
+  let safetyHtml = '<h3>Side Effects</h3><div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">' + compound.sideEffects.map(e => '<div style="background: #F2F2F2; border: none; border-radius: 8px; padding: 12px; color: #1A1A1A;">' + e + '</div>').join('') + '</div>';
+
+  if (sources.regulatory) {
+    const reg = sources.regulatory;
+    safetyHtml += '<h3>Regulatory Status</h3><div style="background: #F2F2F2; border: none; border-radius: 8px; padding: 16px; margin-bottom: 20px;">';
+    safetyHtml += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;"><div><div style="color: #666666; font-size: 12px; text-transform: uppercase;">FDA Status</div><div style="color: #2E7D32; font-weight: 600; margin-top: 4px;">' + reg.fdaStatus + '</div></div>';
+    if (reg.approvalDate) safetyHtml += '<div><div style="color: #666666; font-size: 12px; text-transform: uppercase;">Approval Date</div><div style="color: #1A1A1A; font-weight: 600; margin-top: 4px;">' + reg.approvalDate + '</div></div>';
+    if (reg.brandNames && reg.brandNames.length > 0) safetyHtml += '<div><div style="color: #666666; font-size: 12px; text-transform: uppercase;">Brand Names</div><div style="color: #1A1A1A; font-size: 13px; margin-top: 4px;">' + reg.brandNames.join(', ') + '</div></div>';
+    if (reg.faersReports) safetyHtml += '<div><div style="color: #666666; font-size: 12px; text-transform: uppercase; cursor: help; position: relative; display: inline-flex; align-items: center; gap: 4px;" title="FDA Adverse Event Reporting System — a database of adverse event reports submitted to the FDA. Higher numbers often reflect wider usage, not necessarily higher risk.">FAERS Reports <svg width="12" height="12" viewBox="0 0 16 16" fill="#666666"><circle cx="8" cy="8" r="7" stroke="#666666" fill="none" stroke-width="1.5"/><text x="8" y="12" text-anchor="middle" font-size="11" fill="#666666" font-weight="600">?</text></svg></div><div style="color: #1A1A1A; margin-top: 4px;">' + reg.faersReports.toLocaleString() + '</div></div>';
+    safetyHtml += '</div>';
+    if (reg.topAdverseEvents && reg.topAdverseEvents.length > 0) {
+      safetyHtml += '<div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #F2F2F2;"><div style="color: #666666; font-size: 12px; text-transform: uppercase; margin-bottom: 8px;">Top Adverse Events</div><div style="display: flex; flex-direction: column; gap: 6px;">' + reg.topAdverseEvents.map(ae => '<div style="color: #1A1A1A;">' + ae + '</div>').join('') + '</div></div>';
+    }
+    if (reg.warnings && reg.warnings.length > 0) {
+      safetyHtml += '<div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #F2F2F2; background: #FFEBEE; padding: 12px; border-radius: 6px; border-left: 3px solid #C62828;"><div style="color: #C62828; font-size: 12px; text-transform: uppercase; font-weight: 600; margin-bottom: 8px;">⚠ Warnings</div><div style="display: flex; flex-direction: column; gap: 6px;">' + reg.warnings.map(w => '<div style="color: #1A1A1A; font-size: 13px;">' + w + '</div>').join('') + '</div></div>';
+    }
+    safetyHtml += '</div>';
+  }
+
+  if (sources.protocols) {
+    const proto = sources.protocols;
+    safetyHtml += '<h3>Published Research Protocols</h3><div style="background: #F2F2F2; border: none; border-radius: 8px; padding: 16px;">';
+    safetyHtml += '<div style="background: #FFF3E0; border: 1px solid #E8DFC8; border-radius: 6px; padding: 10px 12px; margin-bottom: 16px; font-size: 12px; color: #E65100; line-height: 1.5;">⚠ The following reflects doses reported in published research studies and clinical trials. This is not a dosing recommendation. Individual response varies significantly. Always consult a licensed healthcare provider before using any compound.</div>';
+    safetyHtml += '<div style="margin-bottom: 12px;"><div style="color: #666666; font-size: 12px; text-transform: uppercase;">Doses Used in Published Studies</div><div style="color: #1A1A1A; margin-top: 4px;">' + proto.standard + '</div><div style="color: var(--text-muted); font-size: 11px; margin-top: 2px;">As reported in published clinical literature</div></div>';
+    safetyHtml += '<div style="margin-bottom: 12px;"><div style="color: #666666; font-size: 12px; text-transform: uppercase;">Administration Route</div><div style="color: #1A1A1A; margin-top: 4px;">' + proto.administration + '</div></div>';
+    safetyHtml += '<div><div style="color: #666666; font-size: 12px; text-transform: uppercase;">Typical Study Duration</div><div style="color: #1A1A1A; margin-top: 4px;">' + proto.cycleLength + '</div></div>';
+    if (proto.source) safetyHtml += '<div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #F2F2F2;"><div style="color: #666666; font-size: 12px;">📄 Source: ' + proto.source + '</div></div>';
+    if (proto.notes) safetyHtml += '<div style="padding-top: 8px;"><div style="color: #666666; font-size: 12px;">📝 ' + proto.notes + '</div></div>';
+    safetyHtml += '</div>';
+  } else {
+    safetyHtml += '<div style="margin-top: 16px; padding: 12px; background: #F2F2F2; border-radius: 6px; color: #666666; font-size: 13px;">Detailed regulatory data and published protocol information not yet indexed for this compound.</div>';
+  }
+
+  document.getElementById('safety-content').innerHTML = safetyHtml;
+  document.getElementById('modal-overlay').classList.add('active');
+
+  // Focus trap (reuse existing `modal` variable from top of function)
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+  setTimeout(function() { modal.querySelector('.modal-close').focus(); }, 100);
+}
+
+function switchTab(button, tabId) {
+  document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  button.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+function closeModal(event) {
+  if (event && event.target !== document.getElementById('modal-overlay')) return;
+  // Restore overview HTML if it was saved by stack popup
+  if (_overviewOriginalHTML) {
+    document.getElementById('overview').innerHTML = _overviewOriginalHTML;
+    _overviewOriginalHTML = '';
+  }
+  // Restore tabs visibility
+  var modal = document.getElementById('modal-overlay').querySelector('.modal');
+  modal.querySelector('.tabs').style.display = 'flex';
+  document.getElementById('modal-overlay').classList.remove('active');
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && document.getElementById('modal-overlay').classList.contains('active')) {
+    if (_overviewOriginalHTML) {
+      document.getElementById('overview').innerHTML = _overviewOriginalHTML;
+      _overviewOriginalHTML = '';
+    }
+    var modal = document.getElementById('modal-overlay').querySelector('.modal');
+    modal.querySelector('.tabs').style.display = 'flex';
+    document.getElementById('modal-overlay').classList.remove('active');
+  }
+});
+
+function openStackPopup(stack) {
+  const overlay = document.getElementById('modal-overlay');
+  const modal = overlay.querySelector('.modal');
+  // Save original overview HTML before overwriting
+  _overviewOriginalHTML = document.getElementById('overview').innerHTML;
+  const stackCompounds = stack.compounds.map(slug => COMPOUNDS.find(c => c.slug === slug)).filter(Boolean);
+  const safetyColors = { compatible: '#2E7D32', monitor: '#E65100', avoid: '#C62828' };
+  const safetyLabels = { compatible: 'Research Supports Combination', monitor: 'Limited Interaction Data', avoid: 'Potential Contraindication' };
+
+  document.getElementById('modal-title').textContent = stack.name;
+  document.getElementById('modal-tier').textContent = stack.goal;
+
+  // Hide regular tabs, show stack content
+  modal.querySelector('.tabs').style.display = 'none';
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+  const overviewEl = document.getElementById('overview');
+  overviewEl.classList.add('active');
+  overviewEl.innerHTML = '<div style="margin-bottom: 20px;"><div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;"><span style="background: ' + (safetyColors[stack.safetyTier] || '#999999') + '; color: #FFFFFF; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700;">' + (safetyLabels[stack.safetyTier] || 'Unknown') + '</span><span style="color: #666666; font-size: 13px;">Popularity: ' + stack.popularity + '</span></div><p style="color: #666666; font-size: 14px; line-height: 1.6;">' + stack.notes + '</p></div><h3 style="color: #1A1A1A; font-size: 16px; margin-bottom: 16px;">Compounds in this Stack</h3><div style="display: flex; flex-direction: column; gap: 12px;">' + stackCompounds.map(c => {
+    const tierColors = {"FDA Approved":"#2E7D32","Phase 2-3 Trials":"#00B4D8","Established Research":"#666666","Emerging Research":"#E65100","Peptide-Adjacent":"#7B1FA2","Experimental/Limited":"#999999"};
+    function getTierColor(tier) { return tierColors[tier] || (tier.startsWith('Approved (') ? '#1565C0' : '#999999'); }
+    return '<div onclick="closeStackAndOpenCompound(\'' + c.slug + '\')" style="background: #F2F2F2; border: none; border-left: 3px solid ' + getTierColor(c.tier) + '; border-radius: 8px; padding: 16px; cursor: pointer; transition: background 150ms;" onmouseover="this.style.background=\'#EAEAEA\'" onmouseout="this.style.background=\'#F2F2F2\'"><div style="display: flex; justify-content: space-between; align-items: start;"><div><div style="color: #1A1A1A; font-weight: 700; font-size: 15px;">' + c.name + '</div><div style="color: #666666; font-size: 12px; margin-top: 4px;">' + c.tier + ' • Grade ' + c.grade + '</div></div><span class="grade-badge grade-' + c.grade.toLowerCase() + '">' + c.grade + '</span></div><div style="color: #666666; font-size: 13px; margin-top: 8px; line-height: 1.5;">' + c.desc + '</div><div style="margin-top: 10px; color: #00B4D8; font-size: 12px; font-weight: 600;">View full details →</div></div>';
+  }).join('') + '</div>';
+
+  overlay.classList.add('active');
+}
+
+function openCompoundBySlug(slug) {
+  var compound = COMPOUNDS.find(function(c) { return c.slug === slug; });
+  if (compound) showCompoundModal(compound);
+}
+
+var _overviewOriginalHTML = '';
+function closeStackAndOpenCompound(slug) {
+  // Restore original overview tab HTML that stack popup overwrote
+  if (_overviewOriginalHTML) {
+    document.getElementById('overview').innerHTML = _overviewOriginalHTML;
+  }
+  // Restore tabs
+  var modal = document.getElementById('modal-overlay').querySelector('.modal');
+  modal.querySelector('.tabs').style.display = 'flex';
+  // Open compound directly without close/reopen
+  var compound = COMPOUNDS.find(function(c) { return c.slug === slug; });
+  if (compound) showCompoundModal(compound);
+}
+
+function setupSearchableSelect(inputId, dropdownId, hiddenId, onSelect) {
+  var input = document.getElementById(inputId);
+  var dropdown = document.getElementById(dropdownId);
+  var hidden = document.getElementById(hiddenId);
+  var sorted = COMPOUNDS.slice().sort(function(a, b) { return a.name.localeCompare(b.name); });
+
+  function render(filter) {
+    var list = filter ? sorted.filter(function(c) { return c.name.toLowerCase().includes(filter.toLowerCase()); }) : sorted;
+    if (list.length === 0) {
+      dropdown.innerHTML = '<div class="searchable-select-empty">No compounds found</div>';
+    } else {
+      dropdown.innerHTML = list.map(function(c) {
+        var sel = c.slug === hidden.value ? ' selected' : '';
+        return '<div role="option" class="searchable-select-option' + sel + '" data-slug="' + c.slug + '" data-name="' + c.name + '">' + c.name + '</div>';
+      }).join('');
+    }
+  }
+
+  input.addEventListener('focus', function() {
+    render(input.value === input.getAttribute('data-selected-name') ? '' : input.value);
+    dropdown.classList.add('open');
+    input.setAttribute('aria-expanded', 'true');
+    if (input.value === input.getAttribute('data-selected-name')) input.select();
+  });
+
+  input.addEventListener('input', function() {
+    highlightIndex = -1;
+    render(input.value);
+    dropdown.classList.add('open');
+  });
+
+  var highlightIndex = -1;
+  input.addEventListener('keydown', function(e) {
+    var options = dropdown.querySelectorAll('.searchable-select-option');
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (!dropdown.classList.contains('open')) { render(''); dropdown.classList.add('open'); }
+      highlightIndex = Math.min(highlightIndex + 1, options.length - 1);
+      options.forEach(function(o, i) { o.style.background = i === highlightIndex ? 'var(--bg-surface-hover)' : ''; });
+      if (options[highlightIndex]) options[highlightIndex].scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      highlightIndex = Math.max(highlightIndex - 1, 0);
+      options.forEach(function(o, i) { o.style.background = i === highlightIndex ? 'var(--bg-surface-hover)' : ''; });
+      if (options[highlightIndex]) options[highlightIndex].scrollIntoView({ block: 'nearest' });
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (highlightIndex >= 0 && options[highlightIndex]) {
+        hidden.value = options[highlightIndex].getAttribute('data-slug');
+        input.value = options[highlightIndex].getAttribute('data-name');
+        input.setAttribute('data-selected-name', options[highlightIndex].getAttribute('data-name'));
+        dropdown.classList.remove('open');
+        input.setAttribute('aria-expanded', 'false');
+        highlightIndex = -1;
+        if (onSelect) onSelect();
+      }
+    } else if (e.key === 'Escape') {
+      dropdown.classList.remove('open');
+      input.setAttribute('aria-expanded', 'false');
+      highlightIndex = -1;
+      input.blur();
+    }
+  });
+
+  dropdown.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    var opt = e.target.closest('.searchable-select-option');
+    if (!opt) return;
+    hidden.value = opt.getAttribute('data-slug');
+    input.value = opt.getAttribute('data-name');
+    input.setAttribute('data-selected-name', opt.getAttribute('data-name'));
+    dropdown.classList.remove('open');
+    input.setAttribute('aria-expanded', 'false');
+    if (onSelect) onSelect();
+  });
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('#' + inputId) && !e.target.closest('#' + dropdownId)) {
+      dropdown.classList.remove('open');
+      input.setAttribute('aria-expanded', 'false');
+      if (hidden.value && input.value !== input.getAttribute('data-selected-name')) {
+        input.value = input.getAttribute('data-selected-name') || '';
+      }
+    }
+  });
+
+  render('');
+}
+
+var _compareInitialized = false;
+function initCompare() {
+  var wrap1 = document.getElementById('compare-select-1-wrap');
+  if (wrap1.dataset.initialized) return;
+  setupSearchableSelect('compare-input-1', 'compare-dropdown-1', 'compare-select-1', updateComparison);
+  setupSearchableSelect('compare-input-2', 'compare-dropdown-2', 'compare-select-2', updateComparison);
+  wrap1.dataset.initialized = 'true';
+}
+
+function updateComparison() {
+  var slug1 = document.getElementById('compare-select-1').value;
+  var slug2 = document.getElementById('compare-select-2').value;
+  if (!slug1 || !slug2) return;
+  const c1 = COMPOUNDS.find(c => c.slug === slug1);
+  const c2 = COMPOUNDS.find(c => c.slug === slug2);
+  const table = document.getElementById('comparison-table');
+  table.innerHTML = '<div class="comparison-row"><div class="comparison-cell">Name</div><div class="comparison-cell">' + c1.name + '</div><div class="comparison-cell">' + c2.name + '</div></div><div class="comparison-row"><div class="comparison-cell">Tier</div><div class="comparison-cell">' + c1.tier + '</div><div class="comparison-cell">' + c2.tier + '</div></div><div class="comparison-row"><div class="comparison-cell">Grade</div><div class="comparison-cell"><span class="grade-badge grade-' + c1.grade.toLowerCase() + '">' + c1.grade + '</span></div><div class="comparison-cell"><span class="grade-badge grade-' + c2.grade.toLowerCase() + '">' + c2.grade + '</span></div></div><div class="comparison-row"><div class="comparison-cell">Studies</div><div class="comparison-cell">' + c1.studies + '</div><div class="comparison-cell">' + c2.studies + '</div></div><div class="comparison-row"><div class="comparison-cell">FDA Status</div><div class="comparison-cell">' + c1.fda + '</div><div class="comparison-cell">' + c2.fda + '</div></div>';
+  document.getElementById('compare-empty').style.display = 'none';
+  table.style.display = 'block';
+}
+
+var _interactionsInitialized = false;
+function initInteractions() {
+  var wrap = document.getElementById('interact-select-a-wrap');
+  if (wrap.dataset.initialized) return;
+  const tiers = [...new Set(COMPOUNDS.map(c => c.tier))];
+  setupSearchableSelect('interact-input-a', 'interact-dropdown-a', 'interact-select-a', liveCheckInteractions);
+  setupSearchableSelect('interact-input-b', 'interact-dropdown-b', 'interact-select-b', liveCheckInteractions);
+
+  // Populate quick pairs from common interactions
+  const quickPairs = INTERACTIONS.filter(i => i.tier === 'compatible').slice(0, 8);
+  const quickPairsEl = document.getElementById('quick-pairs');
+  quickPairsEl.innerHTML = quickPairs.map(i => {
+    const nameA = (COMPOUNDS.find(c => c.slug === i.a) || {}).name || i.a;
+    const nameB = (COMPOUNDS.find(c => c.slug === i.b) || {}).name || i.b;
+    return '<button onclick="setQuickPair(\'' + i.a + '\',\'' + i.b + '\')" style="background: var(--bg-surface); border: none; border-radius: var(--radius-pill); padding: 6px 14px; font-size: 13px; color: var(--text-secondary); cursor: pointer; transition: all 150ms; white-space: nowrap;" onmouseover="this.style.background=\'var(--bg-surface-hover)\'" onmouseout="this.style.background=\'var(--bg-surface)\'">' + nameA + ' + ' + nameB + '</button>';
+  }).join('');
+
+  // Multi-compound selector (collapsible tier groups)
+  const selector = document.getElementById('interaction-selector');
+  let selectorHtml = '';
+  tiers.forEach(tier => {
+    const tiersCompounds = COMPOUNDS.filter(c => c.tier === tier);
+    selectorHtml += '<div class="tier-group collapsed"><div class="tier-group-header" onclick="toggleTierGroup(this)"><span class="tier-group-title">' + tier + '</span><span class="tier-group-count">' + tiersCompounds.length + '</span><span class="tier-group-arrow">▾</span></div><div class="tier-group-body">' + tiersCompounds.map(c => '<div class="selector-checkbox"><input type="checkbox" id="compound-' + c.slug + '" value="' + c.slug + '"><label for="compound-' + c.slug + '">' + c.name + '</label></div>').join('') + '</div></div>';
+  });
+  selector.innerHTML = selectorHtml;
+  var firstGroup = selector.querySelector('.tier-group');
+  if (firstGroup) firstGroup.classList.remove('collapsed');
+  wrap.dataset.initialized = 'true';
+}
+
+function setQuickPair(a, b) {
+  var compA = COMPOUNDS.find(function(c) { return c.slug === a; });
+  var compB = COMPOUNDS.find(function(c) { return c.slug === b; });
+  document.getElementById('interact-select-a').value = a;
+  document.getElementById('interact-input-a').value = compA ? compA.name : a;
+  document.getElementById('interact-input-a').setAttribute('data-selected-name', compA ? compA.name : a);
+  document.getElementById('interact-select-b').value = b;
+  document.getElementById('interact-input-b').value = compB ? compB.name : b;
+  document.getElementById('interact-input-b').setAttribute('data-selected-name', compB ? compB.name : b);
+  liveCheckInteractions();
+}
+
+function liveCheckInteractions() {
+  const slugA = document.getElementById('interact-select-a').value;
+  const slugB = document.getElementById('interact-select-b').value;
+  const results = document.getElementById('interaction-results');
+  const list = document.getElementById('interaction-list');
+  const empty = document.getElementById('interaction-empty');
+
+  if (!slugA || !slugB) {
+    results.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+
+  if (slugA === slugB) {
+    empty.style.display = 'none';
+    results.style.display = 'block';
+    list.innerHTML = '<div style="background: var(--bg-surface); border-radius: var(--radius-md); padding: 24px; text-align: center; color: var(--text-muted);">Select two different compounds to compare.</div>';
+    return;
+  }
+
+  const compA = COMPOUNDS.find(c => c.slug === slugA);
+  const compB = COMPOUNDS.find(c => c.slug === slugB);
+  const inter = INTERACTIONS.find(x => (x.a === slugA && x.b === slugB) || (x.a === slugB && x.b === slugA));
+
+  empty.style.display = 'none';
+  results.style.display = 'block';
+
+  const tierColors = { compatible: '#2E7D32', monitor: '#E65100', caution: '#E65100', timing: '#E65100', avoid: '#C62828' };
+  const tierBgs = { compatible: '#E8F5E9', monitor: '#FFF3E0', caution: '#FFF3E0', timing: '#FFF3E0', avoid: '#FFEBEE' };
+  const tierLabels = { compatible: 'Compatible per Literature', monitor: 'Monitor — Limited Data', caution: 'Monitor — Limited Data', timing: 'Timing-Dependent', avoid: 'Contraindication Reported' };
+  const tierIcons = { compatible: '✓', monitor: '⚠', caution: '⚠', timing: '⏱', avoid: '✕' };
+
+  if (inter) {
+    const color = tierColors[inter.tier] || '#666666';
+    const bg = tierBgs[inter.tier] || '#F5F5F5';
+    const label = tierLabels[inter.tier] || inter.tier;
+    const icon = tierIcons[inter.tier] || '•';
+
+    list.innerHTML = '<div style="background: var(--bg-surface); border-radius: var(--radius-md); padding: 28px;">' +
+      '<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">' +
+        '<span style="font-size: 18px; font-weight: 700; color: var(--text-primary);">' + compA.name + '</span>' +
+        '<span style="color: var(--text-muted); font-size: 20px;">×</span>' +
+        '<span style="font-size: 18px; font-weight: 700; color: var(--text-primary);">' + compB.name + '</span>' +
+      '</div>' +
+      '<div style="display: inline-flex; align-items: center; gap: 6px; background: ' + bg + '; color: ' + color + '; padding: 8px 16px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 600; margin-bottom: 16px;">' +
+        '<span>' + icon + '</span> ' + label +
+      '</div>' +
+      '<p style="color: var(--text-secondary); font-size: 15px; line-height: 1.6;">' + inter.desc + '</p>' +
+      '<div style="margin-top: 20px; display: flex; gap: 8px;">' +
+        '<button onclick="openCompoundBySlug(\'' + slugA + '\')" style="background: none; border: 1px solid var(--border); border-radius: var(--radius-pill); padding: 6px 16px; font-size: 13px; color: var(--accent-text); cursor: pointer;">View ' + compA.name + '</button>' +
+        '<button onclick="openCompoundBySlug(\'' + slugB + '\')" style="background: none; border: 1px solid var(--border); border-radius: var(--radius-pill); padding: 6px 16px; font-size: 13px; color: var(--accent-text); cursor: pointer;">View ' + compB.name + '</button>' +
+      '</div>' +
+    '</div>';
+  } else {
+    list.innerHTML = '<div style="background: var(--bg-surface); border-radius: var(--radius-md); padding: 28px;">' +
+      '<div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">' +
+        '<span style="font-size: 18px; font-weight: 700; color: var(--text-primary);">' + compA.name + '</span>' +
+        '<span style="color: var(--text-muted); font-size: 20px;">×</span>' +
+        '<span style="font-size: 18px; font-weight: 700; color: var(--text-primary);">' + compB.name + '</span>' +
+      '</div>' +
+      '<div style="display: inline-flex; align-items: center; gap: 6px; background: #F5F5F5; color: #666666; padding: 8px 16px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 600; margin-bottom: 16px;">' +
+        'No Known Interaction' +
+      '</div>' +
+      '<p style="color: var(--text-secondary); font-size: 15px; line-height: 1.6;">No published interaction data found between these compounds in our database. The absence of data does not imply safety — consult a qualified healthcare provider for guidance on any compound combination.</p>' +
+      '<div style="margin-top: 20px; display: flex; gap: 8px;">' +
+        '<button onclick="openCompoundBySlug(\'' + slugA + '\')" style="background: none; border: 1px solid var(--border); border-radius: var(--radius-pill); padding: 6px 16px; font-size: 13px; color: var(--accent-text); cursor: pointer;">View ' + compA.name + '</button>' +
+        '<button onclick="openCompoundBySlug(\'' + slugB + '\')" style="background: none; border: 1px solid var(--border); border-radius: var(--radius-pill); padding: 6px 16px; font-size: 13px; color: var(--accent-text); cursor: pointer;">View ' + compB.name + '</button>' +
+      '</div>' +
+    '</div>';
+  }
+}
+
+function toggleTierGroup(header) {
+  header.parentElement.classList.toggle('collapsed');
+}
+
+function checkInteractions() {
+  const selected = Array.from(document.querySelectorAll('#interaction-selector input:checked')).map(i => i.value);
+  const list = document.getElementById('multi-interaction-results');
+  if (selected.length < 2) {
+    list.innerHTML = '<div style="background: var(--bg-surface); border-radius: var(--radius-md); padding: 24px; text-align: center; color: var(--text-muted);">Select at least 2 compounds above to review interactions.</div>';
+    return;
+  }
+  let interactions = [];
+  for (let i = 0; i < selected.length; i++) {
+    for (let j = i + 1; j < selected.length; j++) {
+      const inter = INTERACTIONS.find(x => (x.a === selected[i] && x.b === selected[j]) || (x.a === selected[j] && x.b === selected[i]));
+      if (inter) interactions.push(inter);
+    }
+  }
+
+  const tierColors = { compatible: '#2E7D32', monitor: '#E65100', caution: '#E65100', timing: '#E65100', avoid: '#C62828' };
+  const tierBgs = { compatible: '#E8F5E9', monitor: '#FFF3E0', caution: '#FFF3E0', timing: '#FFF3E0', avoid: '#FFEBEE' };
+  const tierLabels = { compatible: 'Compatible', monitor: 'Monitor', caution: 'Monitor', timing: 'Timing', avoid: 'Avoid' };
+
+  if (interactions.length > 0) {
+    list.innerHTML = '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;"><span style="font-size: 16px; font-weight: 700; color: var(--text-primary);">' + interactions.length + ' interaction' + (interactions.length > 1 ? 's' : '') + ' found</span><span style="color: var(--text-muted); font-size: 13px;">across ' + selected.length + ' compounds</span></div>' +
+      interactions.map(function(i) {
+        var nameA = (COMPOUNDS.find(function(c) { return c.slug === i.a; }) || {}).name || i.a;
+        var nameB = (COMPOUNDS.find(function(c) { return c.slug === i.b; }) || {}).name || i.b;
+        var color = tierColors[i.tier] || '#666666';
+        var bg = tierBgs[i.tier] || '#F5F5F5';
+        var label = tierLabels[i.tier] || i.tier;
+        return '<div style="background: var(--bg-surface); border-radius: var(--radius-sm); padding: 16px; margin-bottom: 8px; border-left: 3px solid ' + color + ';">' +
+          '<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">' +
+            '<span style="font-weight: 600; color: var(--text-primary);">' + nameA + ' × ' + nameB + '</span>' +
+            '<span style="background: ' + bg + '; color: ' + color + '; padding: 3px 10px; border-radius: var(--radius-pill); font-size: 11px; font-weight: 600;">' + label + '</span>' +
+          '</div>' +
+          '<p style="color: var(--text-secondary); font-size: 14px; line-height: 1.5; margin: 0;">' + i.desc + '</p>' +
+        '</div>';
+      }).join('');
+  } else {
+    list.innerHTML = '<div style="background: var(--bg-surface); border-radius: var(--radius-md); padding: 24px; text-align: center;"><p style="color: var(--text-secondary); margin: 0;">No published interactions found between the ' + selected.length + ' selected compounds. Absence of data does not imply safety — consult a healthcare provider.</p></div>';
+  }
+}
+
+function initStackFinder() {
+  const presetsGrid = document.getElementById('presets-grid');
+  presetsGrid.innerHTML = POPULAR_STACKS.map(stack => '<div class="preset-card" onclick="loadPreset(\'' + stack.slug + '\')"><h4>' + stack.name + '</h4><p>' + stack.goal + '</p></div>').join('');
+  const GOALS = ["fat_loss", "metabolic", "athletic_perf", "sexual_health", "energy", "cognitive", "muscle_growth", "anti_aging", "recovery", "sleep_quality", "injury_recovery", "connective_tissue", "skin_health", "hair_growth", "gut_health", "immune", "anxiety"];
+  const goalsGrid = document.getElementById('goals-grid');
+  goalsGrid.innerHTML = GOALS.map(goal => '<div class="goal-checkbox"><input type="checkbox" id="goal-' + goal + '" value="' + goal + '" onchange="updateStackResults()"><label for="goal-' + goal + '" class="goal-label">' + goal.replace(/_/g, ' ') + '</label></div>').join('');
+}
+
+function loadPreset(slug) {
+  document.querySelectorAll('#goals-grid input').forEach(c => c.checked = false);
+  const GOAL_MAP = {"wolverine": ["injury_recovery", "connective_tissue"], "glow": ["injury_recovery", "connective_tissue", "skin_health", "anti_aging"], "trinity": ["fat_loss", "athletic_perf"], "mitochondrial": ["energy", "metabolic", "anti_aging"], "nootropic": ["cognitive", "anxiety"], "gh-opt": ["muscle_growth", "athletic_perf", "recovery"], "longevity": ["anti_aging", "immune"], "fat-loss": ["fat_loss", "metabolic"], "cognitive": ["cognitive", "anti_aging"], "gut-healing": ["gut_health", "immune"]};
+  (GOAL_MAP[slug] || []).forEach(goal => {
+    const el = document.getElementById('goal-' + goal);
+    if (el) el.checked = true;
+  });
+  updateStackResults();
+}
+
+function updateStackResults() {
+  const selected = Array.from(document.querySelectorAll('#goals-grid input:checked')).map(i => i.value);
+  const activeGoals = document.getElementById('active-goals');
+  const resultsSection = document.getElementById('results-section');
+  const resultsEmpty = document.getElementById('results-empty');
+  if (selected.length === 0) {
+    activeGoals.classList.remove('visible');
+    resultsSection.style.display = 'none';
+    resultsEmpty.style.display = 'block';
+    return;
+  }
+  activeGoals.classList.add('visible');
+  document.getElementById('goals-count').textContent = selected.length + ' research ' + (selected.length !== 1 ? 'areas' : 'area') + ' selected';
+  document.getElementById('active-goals-list').innerHTML = selected.map(g => '<div class="goal-chip">' + g.replace(/_/g, ' ') + '</div>').join('');
+  const scored = COMPOUNDS.map(c => {
+    const grades = COMPOUND_GOAL_GRADES[c.slug] || {};
+    let score = 0;
+    selected.forEach(goal => {
+      const g = grades[goal];
+      if (g === 'A') score += 3;
+      else if (g === 'B') score += 2;
+      else if (g === 'C') score += 1;
+    });
+    return { compound: c, score };
+  }).filter(x => x.score > 0).sort((a, b) => b.score - a.score);
+  if (scored.length === 0) {
+    resultsSection.style.display = 'none';
+    resultsEmpty.style.display = 'block';
+    return;
+  }
+  resultsEmpty.style.display = 'none';
+  resultsSection.style.display = 'grid';
+  const main = document.getElementById('results-main');
+  main.innerHTML = scored.map(item => {
+    const c = item.compound;
+    const g = COMPOUND_GOAL_GRADES[c.slug] || {};
+    const goalRows = selected.map(goal => {
+      const grade = g[goal] || '-';
+      return '<tr><td>' + goal.replace(/_/g, ' ') + '</td><td><span class="grade-badge grade-' + grade.toLowerCase() + '">' + grade + '</span></td></tr>';
+    }).join('');
+    let badgeClass = 'badge-weak';
+    let badgeText = 'Limited Data';
+    if (item.score >= 7) { badgeClass = 'badge-top'; badgeText = 'Strong Evidence'; }
+    else if (item.score >= 5) { badgeClass = 'badge-strong'; badgeText = 'Moderate Evidence'; }
+    else if (item.score >= 3) { badgeClass = 'badge-consider'; badgeText = 'Emerging Evidence'; }
+    return '<div class="result-card" onclick="openCompoundBySlug(\'' + c.slug + '\')" style="cursor: pointer;" onmouseover="this.style.background=\'#EAEAEA\'" onmouseout="this.style.background=\'transparent\'"><div class="result-header"><div class="result-title">' + c.name + '</div><div class="result-badge ' + badgeClass + '">' + badgeText + '</div></div><table class="goal-grades-table"><tbody>' + goalRows + '</tbody></table><div class="plaintext-summary">' + (c.benefits[0] || 'Research compound') + '</div><div style="margin-top: 12px; color: #00B4D8; font-size: 12px; font-weight: 600;">View full compound profile →</div></div>';
+  }).join('');
+  const sidebar = document.getElementById('results-sidebar');
+  sidebar.innerHTML = '<div class="popular-stacks-sidebar"><h4>Researched Stacks</h4>' + POPULAR_STACKS.map(function(stack, i) { return '<div class="sidebar-stack" style="cursor: pointer;" onclick="openStackPopup(POPULAR_STACKS[' + i + '])" onmouseover="this.style.background=\'#EAEAEA\'" onmouseout="this.style.background=\'transparent\'"><div class="sidebar-stack-name">' + stack.name + '</div><div class="sidebar-stack-goal">' + stack.goal + '</div></div>'; }).join('') + '</div>';
+}
+
+function clearAllGoals() {
+  document.querySelectorAll('#goals-grid input').forEach(c => c.checked = false);
+  updateStackResults();
+}
+    </script>
+</body>
+</html>
