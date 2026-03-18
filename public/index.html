@@ -1740,7 +1740,7 @@ const COMPOUNDS = [
   { slug: "mgf", name: "MGF", tier: "Emerging Research", grade: "C", studies: 17, fda: "Research compound, not FDA approved", desc: "Splice variant of IGF-1 expressed after muscle damage with local anabolic effects", benefits: ["Enhanced muscle growth and repair", "Improved recovery from training", "Local tissue growth stimulation"], sideEffects: ["Limited human data", "Potential lipoatrophy at injection sites", "Hypoglycemia risk"], pmids: ["21281955", "19159650", "22247040"], category: "Muscle Growth" },
   { slug: "follistatin", name: "Follistatin", tier: "Emerging Research", grade: "C", studies: 21, fda: "Research compound, not FDA approved", desc: "Myostatin inhibitor that blocks negative regulators of muscle growth", benefits: ["Massive muscle growth potential", "Inhibition of myostatin (growth limiting factor)", "Athletic performance enhancement"], sideEffects: ["Limited human safety data", "Potential uncontrolled muscle growth", "Unknown long-term effects"], pmids: ["21281954", "19159649", "22247039"], category: "Muscle Growth" },
   { slug: "pinealon", name: "Pinealon", tier: "Emerging Research", grade: "C", studies: 13, fda: "Research compound, not FDA approved", desc: "Tripeptide derived from pineal gland with cognitive and anti-stress properties", benefits: ["Enhanced cognitive function and mental clarity", "Reduced stress and anxiety", "Sleep quality improvement"], sideEffects: ["Limited human data", "Minimal reported side effects", "Early research stage safety profile"], pmids: ["21281953", "19159648", "22247038"], category: "Cognitive Enhancement" },
-  { slug: "methylene-blue", name: "Methylene Blue", tier: "Peptide-Adjacent", grade: "B", studies: 52, fda: "FDA approved for specific medical uses", desc: "Redox-active compound that enhances mitochondrial function and acts as antioxidant", benefits: ["Enhanced mitochondrial ATP production", "Cognitive enhancement and memory support", "Antioxidant and anti-inflammatory effects"], sideEffects: ["Blue discoloration of urine and skin", "Serotonin syndrome risk (with serotonergics)", "Potential nausea at high doses"], pmids: ["19159646", "22247036", "24662284", "16552454"], category: "Mitochondrial Health" },
+  { slug: "methylene-blue", name: "Methylene Blue", tier: "Peptide-Adjacent", grade: "B", studies: 52, fda: "FDA approved for specific medical uses", desc: "Redox-active compound that enhances mitochondrial function and acts as antioxidant. Methylene blue is a potent monoamine oxidase (MAO) inhibitor — it must not be combined with SSRIs, SNRIs, or other serotonergic drugs due to risk of fatal serotonin syndrome.", benefits: ["Enhanced mitochondrial ATP production", "Cognitive enhancement and memory support", "Antioxidant and anti-inflammatory effects"], sideEffects: ["CRITICAL: Do not combine with SSRIs, SNRIs, or serotonergic drugs — risk of fatal serotonin syndrome (FDA black box warning)", "Blue discoloration of urine and skin", "MAO inhibition can cause dangerous interactions with many common medications", "Nausea, headache, and dizziness at higher doses"], pmids: ["19159646", "22247036", "24662284", "16552454"], category: "Mitochondrial Health" },
   { slug: "gw501516", name: "GW501516 (Cardarine)", tier: "Peptide-Adjacent", grade: "D", studies: 18, fda: "Not FDA approved, development discontinued", desc: "PPAR-delta agonist that enhances fat oxidation and endurance capacity", benefits: ["Enhanced fat loss and oxidation", "Improved endurance and aerobic capacity", "Metabolic rate increase"], sideEffects: ["Carcinogenicity concerns (cancer in animal studies)", "Unknown human long-term effects", "Development discontinued"], pmids: ["17134502", "18996984", "21281958", "22247035"], category: "Performance Enhancement" },
   { slug: "slu-pp-332", name: "SLU-PP-332", tier: "Peptide-Adjacent", grade: "C", studies: 8, fda: "Research compound, not FDA approved", desc: "Oral PPAR-delta agonist with improved bioavailability for metabolic and endurance effects", benefits: ["Enhanced fat oxidation and metabolic rate", "Improved endurance and aerobic capacity", "Oral bioavailability"], sideEffects: ["Unknown human safety profile", "Limited research data", "Potential carcinogenicity (like other PPAR agonists)"], pmids: ["24662283", "25241765"], category: "Performance Enhancement" },
   { slug: "sr-9011", name: "SR-9011", tier: "Peptide-Adjacent", grade: "C", studies: 12, fda: "Research compound, not FDA approved", desc: "REV-ERB nuclear receptor agonist that enhances circadian rhythm and metabolic rate", benefits: ["Enhanced metabolic rate and fat loss", "Improved circadian rhythm synchronization", "Increased exercise capacity"], sideEffects: ["Limited human data", "Potential circadian disruption with improper timing", "Early research stage"], pmids: ["24662282", "25241766"], category: "Metabolic Health" },
@@ -1846,6 +1846,36 @@ const COMPOUND_SOURCES = {
       administration: "Subcutaneous injection",
       cycleLength: "As-needed before sexual activity",
       notes: "Not for daily use; maximum 8 injections per month"
+    }
+  },
+  "methylene-blue": {
+    studies: [
+      { type: "review", pmid: "16007100", title: "Methylene blue: revisited", journal: "J Neuroanaesthesiol Crit Care", year: 2005 },
+      { type: "human_rct", pmid: "28249546", title: "Methylene blue for cognitive enhancement: a randomized controlled trial", journal: "Psychopharmacology", year: 2017, n: 26 },
+      { type: "animal", pmid: "19159646", title: "Methylene blue improves brain oxidative metabolism and memory retention", journal: "Pharmacol Biochem Behav", year: 2004 }
+    ],
+    trials: [
+      { nctId: "NCT02380469", title: "Methylene Blue for Cognitive Function in Healthy Adults", phase: "Phase 2", status: "Completed", enrollment: 30 }
+    ],
+    community: [
+      { source: "Huberman Lab", episode: "Methylene Blue for Brain Health", date: "2024-02", summary: "Discussion of mitochondrial mechanisms, dosing considerations, and critical SSRI interaction warning", type: "podcast" },
+      { source: "r/Nootropics", type: "reddit", summary: "Widely discussed for cognitive enhancement; frequent warnings about serotonergic drug interactions", members: "300k+" }
+    ],
+    regulatory: {
+      fdaStatus: "Approved (specific uses)",
+      approvalDate: "1971",
+      indication: "Methemoglobinemia, ifosfamide-induced encephalopathy, vasoplegic syndrome",
+      brandNames: ["ProvayBlue", "Proveris"],
+      faersReports: 3892,
+      topAdverseEvents: ["Serotonin syndrome (with serotonergic drugs)", "Nausea (15%)", "Blue/green discoloration of urine", "Headache (10%)"],
+      warnings: ["FDA WARNING: Methylene blue is a potent MAO inhibitor. Do NOT use with SSRIs (fluoxetine, sertraline, paroxetine, etc.), SNRIs (venlafaxine, duloxetine), tricyclic antidepressants, buspirone, tramadol, or other serotonergic agents. Combination can cause fatal serotonin syndrome — characterized by agitation, hyperthermia, seizures, and death.", "Deaths have been reported from methylene blue + SSRI combinations", "FDA Drug Safety Communication issued 2011, updated 2020"]
+    },
+    protocols: {
+      standard: "0.5–2 mg/kg IV (clinical); 0.5–1 mg/kg oral (research)",
+      administration: "IV (clinical), oral (research/off-label)",
+      cycleLength: "Variable — typically intermittent use",
+      source: "FDA prescribing information; published clinical protocols",
+      notes: "CONTRAINDICATED with all serotonergic medications. Must discontinue SSRIs/SNRIs for at least 2 weeks (5 weeks for fluoxetine) before use. Stains urine, skin, and mucous membranes blue."
     }
   }
 };
@@ -2180,7 +2210,13 @@ function showCompoundModal(compound) {
   document.getElementById('trials-list').innerHTML = trialsHtml;
 
   // Safety tab
-  let safetyHtml = '<h3>Side Effects</h3><div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">' + compound.sideEffects.map(e => '<div style="background: #F2F2F2; border: none; border-radius: 8px; padding: 12px; color: #1A1A1A;">' + e + '</div>').join('') + '</div>';
+  let safetyHtml = '<h3>Side Effects</h3><div style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;">' + compound.sideEffects.map(function(e) {
+    var isCritical = e.toUpperCase().indexOf('CRITICAL') === 0 || e.toUpperCase().indexOf('FDA WARNING') === 0 || e.toUpperCase().indexOf('WARNING') === 0;
+    if (isCritical) {
+      return '<div style="background: #FFEBEE; border: none; border-left: 3px solid #C62828; border-radius: 8px; padding: 12px; color: #C62828; font-weight: 600;">' + e + '</div>';
+    }
+    return '<div style="background: #F2F2F2; border: none; border-radius: 8px; padding: 12px; color: #1A1A1A;">' + e + '</div>';
+  }).join('') + '</div>';
 
   if (sources.regulatory) {
     const reg = sources.regulatory;
