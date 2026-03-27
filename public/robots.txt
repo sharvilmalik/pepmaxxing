@@ -1,0 +1,37 @@
+# pepmaxxing.xyz - Robots.txt
+# Welcome crawlers! We want to be indexed.
+
+User-agent: *
+Allow: /
+Disallow:
+
+# AI Crawlers - explicitly allowed (GEO strategy)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Sitemap
+Sitemap: https://pepmaxxing.xyz/sitemap.xml
