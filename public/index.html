@@ -3281,11 +3281,259 @@ var ASCENSION_STACKS = {
   ]
 };
 
+// ===== SEO: per-compound meta, JSON-LD, and related articles =====
+const COMPOUND_META = {
+  "semaglutide": "Semaglutide research review — Grade A, 47 peer-reviewed studies. FDA-approved GLP-1, STEP trial data, weight loss efficacy — pepmaxxing.",
+  "tirzepatide": "Tirzepatide research guide — Grade A, 38 clinical studies. Dual GLP-1/GIP agonist with superior weight loss vs GLP-1 alone — pepmaxxing.",
+  "pt-141": "PT-141 (Bremelanotide) research — Grade A, 19 peer-reviewed studies. FDA-approved melanocortin agonist for sexual desire — pepmaxxing.",
+  "tesamorelin": "Tesamorelin research — Grade A, 31 studies. GHRH analog for growth hormone, body composition, metabolic health — pepmaxxing.",
+  "oxytocin": "Oxytocin research review — Grade A, 52 peer-reviewed studies. Social bonding, trust, sexual function evidence — pepmaxxing.",
+  "liraglutide": "Liraglutide research guide — Grade A, 41 studies. GLP-1 agonist for weight loss, diabetes, cardiovascular benefits — pepmaxxing.",
+  "tadalafil": "Tadalafil research review — Grade A, 58 studies. PDE5 inhibitor for vasodilation, blood flow, sexual function — pepmaxxing.",
+  "hcg": "Human Chorionic Gonadotropin research — Grade A, 36 studies. Hormone therapy for testosterone production, testicular function — pepmaxxing.",
+  "semax": "Semax research guide — Grade B, 28 studies. Russian-approved ACTH analog for cognitive enhancement, neuroprotection — pepmaxxing.",
+  "selank": "Selank research review — Grade B, 22 studies. Enkephalin analog for anxiety, cognition, BBB penetration — pepmaxxing.",
+  "thymosin-alpha-1": "Thymosin Alpha-1 research — Grade B, 35 studies. Approved in 35+ countries, T-cell maturation, immune enhancement — pepmaxxing.",
+  "cerebrolysin": "Cerebrolysin research guide — Grade B, 32 studies. EU/Russia-approved peptide mixture for neuroprotection — pepmaxxing.",
+  "retatrutide": "Retatrutide research review — Grade B, 12 Phase 3 studies. Triple GLP-1/GIP/GCG agonist, weight loss potential — pepmaxxing.",
+  "tesofensine": "Tesofensine research — Grade B, 9 Phase 2 studies. Monoamine inhibitor for appetite reduction, weight loss — pepmaxxing.",
+  "survodutide": "Survodutide research guide — Grade B, 8 Phase 2 studies. GLP-1/GCG dual agonist for metabolic health — pepmaxxing.",
+  "orforglipron": "Orforglipron research — Grade B, 7 Phase 2 studies. Oral GLP-1 agonist for convenient weight loss therapy — pepmaxxing.",
+  "ss-31": "SS-31 (Elamipretide) research — Grade B, 14 Phase 2 studies. Mitochondrial peptide for energy production — pepmaxxing.",
+  "cagrilintide": "Cagrilintide research guide — Grade B, 11 Phase 2 studies. Amylin analog for appetite, gastric emptying — pepmaxxing.",
+  "bpc-157": "BPC-157 research review — Grade B, 89 peer-reviewed studies. Pentadecapeptide for tissue healing, angiogenesis — pepmaxxing.",
+  "tb-500": "TB-500 (Thymosin Beta 4) research — Grade B, 76 studies. Peptide for tissue regeneration, cell growth — pepmaxxing.",
+  "cjc-1295": "CJC-1295 research guide — Grade B, 41 studies. Long-acting GHRH analog for growth hormone stimulation — pepmaxxing.",
+  "ipamorelin": "Ipamorelin research review — Grade B, 48 studies. Ghrelin mimetic GH secretagogue, minimal cortisol — pepmaxxing.",
+  "ghk-cu": "GHK-Cu (Copper Peptide) research — Grade B, 67 studies. Tripeptide for collagen synthesis, tissue remodeling — pepmaxxing.",
+  "epithalon": "Epithalon research guide — Grade B, 38 studies. Pineal tetrapeptide for telomerase, circadian rhythm — pepmaxxing.",
+  "mots-c": "MOTS-c research review — Grade B, 22 studies. Mitochondrial peptide for metabolic flexibility, insulin — pepmaxxing.",
+  "ghrp-2": "GHRP-2 research — Grade B, 35 studies. Growth hormone releasing peptide for GH secretion — pepmaxxing.",
+  "ghrp-6": "GHRP-6 research guide — Grade B, 33 studies. GH releasing peptide with ghrelin agonism effects — pepmaxxing.",
+  "hexarelin": "Hexarelin research review — Grade B, 29 studies. Ghrelin mimetic for powerful growth hormone release — pepmaxxing.",
+  "sermorelin": "Sermorelin research — Grade B, 37 studies. FDA-approved GHRH analog for pituitary GH stimulation — pepmaxxing.",
+  "kpv": "KPV research guide — Grade C, 18 studies. Tripeptide for immune modulation, gut inflammation — pepmaxxing.",
+  "dsip": "DSIP research review — Grade C, 24 studies. Nonapeptide for deep sleep, natural sleep initiation — pepmaxxing.",
+  "dihexa": "Dihexa research — Grade C, 15 studies. Hexapeptide for learning, memory consolidation enhancement — pepmaxxing.",
+  "pe-22-28": "PE-22-28 research guide — Grade C, 12 studies. Neuropeptide Y analog for anxiety, stress reduction — pepmaxxing.",
+  "mk-677": "MK-677 (Ibutamoren) research review — Grade C, 31 studies. Ghrelin agonist for GH, IGF-1 secretion — pepmaxxing.",
+  "igf-1-lr3": "IGF-1 LR3 research — Grade C, 28 studies. Long-acting anabolic peptide with extended half-life — pepmaxxing.",
+  "kisspeptin": "Kisspeptin research guide — Grade C, 16 studies. Neuropeptide for GnRH, reproductive hormone axis — pepmaxxing.",
+  "gonadorelin": "Gonadorelin research review — Grade C, 20 studies. FDA-approved GnRH agonist for LH, FSH, testosterone — pepmaxxing.",
+  "ll-37": "LL-37 research — Grade C, 19 studies. Antimicrobial peptide for immune modulation, barrier — pepmaxxing.",
+  "mgf": "MGF research guide — Grade C, 17 studies. IGF-1 splice variant for local anabolic muscle growth — pepmaxxing.",
+  "follistatin": "Follistatin research review — Grade C, 21 studies. Myostatin inhibitor for muscle growth potential — pepmaxxing.",
+  "pinealon": "Pinealon research — Grade C, 13 studies. Pineal tripeptide for cognition, anti-stress properties — pepmaxxing.",
+  "methylene-blue": "Methylene Blue research guide — Grade B, 52 studies. Mitochondrial enhancer, antioxidant with MAO inhibition — pepmaxxing.",
+  "gw501516": "GW501516 (Cardarine) research review — Grade D, 18 studies. PPAR-delta agonist for endurance — pepmaxxing.",
+  "slu-pp-332": "SLU-PP-332 research — Grade C, 8 studies. Oral PPAR-delta agonist for metabolic, endurance effects — pepmaxxing.",
+  "sr-9011": "SR-9011 research guide — Grade C, 12 studies. REV-ERB agonist for circadian rhythm, metabolism — pepmaxxing.",
+  "5-amino-1mq": "5-Amino-1MQ research review — Grade C, 9 studies. NAD+ metabolism modulator for metabolic function — pepmaxxing.",
+  "nmn": "NMN research — Grade B, 43 studies. NAD+ precursor for mitochondrial function, energy metabolism — pepmaxxing.",
+  "nad+": "NAD+ research guide — Grade B, 38 studies. Coenzyme for energy, cell signaling, mitochondrial health — pepmaxxing.",
+  "l-carnitine-injectable": "L-Carnitine (Injectable) research review — Grade B, 41 studies. Amino acid for fat oxidation — pepmaxxing.",
+  "glutathione-injectable": "Glutathione (Injectable) research — Grade B, 36 studies. Master antioxidant for detoxification — pepmaxxing.",
+  "melanotan-ii": "Melanotan II research guide — Grade D, 14 studies. Melanocortin agonist for tanning, sexual function — pepmaxxing.",
+  "aod-9604": "AOD-9604 research review — Grade D, 11 studies. HGH fragment for lipolysis without metabolic effects — pepmaxxing.",
+  "p21": "P21 research — Grade D, 8 studies. CDK inhibitor peptide with anti-aging potential — pepmaxxing.",
+  "vilon": "Vilon research guide — Grade D, 6 studies. Peptide-based immunomodulator for immune support — pepmaxxing.",
+  "cortagen": "Cortagen research review — Grade D, 7 studies. Peptide for cortisol modulation, stress reduction — pepmaxxing.",
+  "snap-8": "SNAP-8 research — Grade D, 9 studies. Botulinum-mimic octapeptide for topical wrinkle reduction — pepmaxxing."
+};
+
+
+const ARTICLE_TITLES = {
+  "bpc-157-vs-tb-500": "BPC-157 vs TB-500: Which Healing Peptide Has Better Evidence?",
+  "best-peptides-muscle-recovery-2026": "Best Peptides for Muscle Recovery in 2026: What the Research Says",
+  "peptide-evidence-grades-explained": "Peptide Evidence Grades Explained",
+  "peptide-stacks-beginners-guide": "Peptide Stacks for Beginners: How to Combine Compounds Safely",
+  "peptides-weight-loss-complete-guide-2026": "Peptides for Weight Loss: The Complete 2026 Research Guide",
+  "semaglutide-vs-tirzepatide": "Semaglutide vs Tirzepatide: Head-to-Head Research Comparison",
+  "peptides-weight-loss-women": "Peptides for Weight Loss in Women",
+  "peptides-weight-loss-men": "Peptides for Weight Loss in Men",
+  "peptides-weight-loss-after-30": "Peptides for Weight Loss After 30",
+  "peptides-weight-loss-after-40": "Peptides for Weight Loss After 40",
+  "retatrutide-phase-3-review": "Retatrutide Research Review: The Phase 3 Triple Agonist",
+  "glp1-peptides-beyond-semaglutide": "GLP-1 Peptides Beyond Semaglutide: The Complete Family Tree",
+  "ghk-cu-copper-peptide-research": "GHK-Cu Copper Peptide: The Complete Research Review",
+  "cognitive-peptides-semax-selank-dihexa": "Cognitive Peptides: Semax, Selank & Dihexa Research Breakdown",
+  "longevity-peptides-epithalon-ss31-nmn": "Longevity Peptides: Epithalon, SS-31, NMN & What the Research Actually Shows"
+};
+
+const COMPOUND_RELATED_ARTICLES = {
+  "semaglutide": ["semaglutide-vs-tirzepatide", "glp1-peptides-beyond-semaglutide", "peptides-weight-loss-complete-guide-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "tirzepatide": ["semaglutide-vs-tirzepatide", "glp1-peptides-beyond-semaglutide", "peptides-weight-loss-complete-guide-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "pt-141": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "tesamorelin": ["longevity-peptides-epithalon-ss31-nmn", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "oxytocin": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "liraglutide": ["glp1-peptides-beyond-semaglutide", "peptides-weight-loss-complete-guide-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "tadalafil": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "hcg": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "semax": ["cognitive-peptides-semax-selank-dihexa", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "selank": ["cognitive-peptides-semax-selank-dihexa", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "thymosin-alpha-1": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "cerebrolysin": ["cognitive-peptides-semax-selank-dihexa", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "retatrutide": ["retatrutide-phase-3-review", "glp1-peptides-beyond-semaglutide", "peptides-weight-loss-complete-guide-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "tesofensine": ["peptides-weight-loss-complete-guide-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "survodutide": ["peptides-weight-loss-complete-guide-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "orforglipron": ["peptides-weight-loss-complete-guide-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "ss-31": ["longevity-peptides-epithalon-ss31-nmn", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "cagrilintide": ["peptides-weight-loss-complete-guide-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "bpc-157": ["bpc-157-vs-tb-500", "best-peptides-muscle-recovery-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "tb-500": ["bpc-157-vs-tb-500", "best-peptides-muscle-recovery-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "cjc-1295": ["best-peptides-muscle-recovery-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "ipamorelin": ["best-peptides-muscle-recovery-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "ghk-cu": ["ghk-cu-copper-peptide-research", "longevity-peptides-epithalon-ss31-nmn", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "epithalon": ["longevity-peptides-epithalon-ss31-nmn", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "mots-c": ["longevity-peptides-epithalon-ss31-nmn", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "ghrp-2": ["best-peptides-muscle-recovery-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "ghrp-6": ["best-peptides-muscle-recovery-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "hexarelin": ["best-peptides-muscle-recovery-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "sermorelin": ["best-peptides-muscle-recovery-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "kpv": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "dsip": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "dihexa": ["cognitive-peptides-semax-selank-dihexa", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "pe-22-28": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "mk-677": ["best-peptides-muscle-recovery-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "igf-1-lr3": ["best-peptides-muscle-recovery-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "kisspeptin": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "gonadorelin": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "ll-37": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "mgf": ["best-peptides-muscle-recovery-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "follistatin": ["best-peptides-muscle-recovery-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "pinealon": ["cognitive-peptides-semax-selank-dihexa", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "methylene-blue": ["longevity-peptides-epithalon-ss31-nmn", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "gw501516": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "slu-pp-332": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "sr-9011": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "5-amino-1mq": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "nmn": ["longevity-peptides-epithalon-ss31-nmn", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "nad+": ["longevity-peptides-epithalon-ss31-nmn", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "l-carnitine-injectable": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "glutathione-injectable": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "melanotan-ii": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "aod-9604": ["peptides-weight-loss-complete-guide-2026", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "p21": ["longevity-peptides-epithalon-ss31-nmn", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "vilon": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "cortagen": ["peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"],
+  "snap-8": ["longevity-peptides-epithalon-ss31-nmn", "peptide-evidence-grades-explained", "peptide-stacks-beginners-guide"]
+};
+
+function renderRelatedArticles(compound) {
+  const articles = COMPOUND_RELATED_ARTICLES[compound.slug] || [];
+  if (articles.length === 0) return '';
+
+  let html = '<div style="margin-top: 24px; padding: 20px; background: var(--bg-surface); border-radius: var(--radius-md);">';
+  html += '<h3 style="font-size: 16px; font-weight: 700; margin-bottom: 12px;">Related Research Guides</h3>';
+
+  articles.forEach(slug => {
+    const title = ARTICLE_TITLES[slug];
+    if (title) {
+      html += `<a href="#blog/${slug}" onclick="showArticle('${slug}'); return false;" style="display: block; padding: 8px 0; color: var(--accent-text); text-decoration: none; border-bottom: 1px solid var(--border);">→ ${title}</a>`;
+    }
+  });
+
+  html += '</div>';
+  return html;
+}
+
+function injectCompoundSchema(compound) {
+  const existingScript = document.getElementById('compound-jsonld');
+  if (existingScript) {
+    existingScript.remove();
+  }
+
+  const citations = compound.pmids && compound.pmids.length > 0
+    ? compound.pmids.map(pmid => ({
+        "@type": "ScholarlyArticle",
+        "@id": `https://pubmed.ncbi.nlm.nih.gov/${pmid}/`,
+        "name": `PubMed Article ${pmid}`
+      }))
+    : [];
+
+  const breadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://pepmaxxing.xyz"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Browse",
+        "item": "https://pepmaxxing.xyz/#browse"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": compound.name,
+        "item": `https://pepmaxxing.xyz/#compound/${compound.slug}`
+      }
+    ]
+  };
+
+  const medicalPage = {
+    "@context": "https://schema.org",
+    "@type": "MedicalWebPage",
+    "url": `https://pepmaxxing.xyz/#compound/${compound.slug}`,
+    "name": `${compound.name} - Research Database`,
+    "description": compound.desc,
+    "about": {
+      "@type": "Drug",
+      "name": compound.name,
+      "description": compound.desc,
+      "legalStatus": compound.fda,
+      "mechanismOfAction": compound.desc
+    },
+    "mainContentOfPage": {
+      "@type": "WebPageElement",
+      "name": compound.name,
+      "text": compound.desc
+    },
+    "citation": citations,
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "pepmaxxing",
+      "url": "https://pepmaxxing.xyz"
+    },
+    "reviewedBy": {
+      "@type": "Organization",
+      "name": "pepmaxxing"
+    },
+    "author": {
+      "@type": "Organization",
+      "name": "pepmaxxing"
+    }
+  };
+
+  const schemaScript = document.createElement('script');
+  schemaScript.type = 'application/ld+json';
+  schemaScript.id = 'compound-jsonld';
+  schemaScript.textContent = JSON.stringify([breadcrumb, medicalPage]);
+
+  document.head.appendChild(schemaScript);
+}
+function updateCompoundMetaDescription(compound) {
+  var desc = (typeof COMPOUND_META !== 'undefined' && COMPOUND_META[compound.slug]) || compound.desc;
+  var metaTag = document.querySelector('meta[name="description"]');
+  if (metaTag) metaTag.setAttribute('content', desc);
+  var ogTag = document.querySelector('meta[property="og:description"]');
+  if (ogTag) ogTag.setAttribute('content', desc);
+}
+// ===== END SEO module =====
+
 function showCompoundModal(compound) {
   // SEO: Update URL for compound pages
   history.replaceState(null, '', '#compound/' + compound.slug);
   document.title = compound.name + ' — Research, Studies, Safety & Evidence Grade | pepmaxxing';
   if (!compound || !compound.slug) return;
+  // SEO: dynamic meta description + JSON-LD schema
+  try { updateCompoundMetaDescription(compound); } catch(e) {}
+  try { injectCompoundSchema(compound); } catch(e) {}
   const sources = COMPOUND_SOURCES[compound.slug] || {};
 
   // Restore tabs (may be hidden from stack popup)
@@ -3309,7 +3557,7 @@ function showCompoundModal(compound) {
   var stackHtml = stackList.length > 0 ? stackList.map(function(s) { return '<div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #C6F6D5;"><div><div style="font-size: 13px; font-weight: 600; color: #2E7D32;">Also available as stack</div><div style="font-size: 12px; color: #666666; margin-top: 2px;">' + s.name + '</div></div><a href="' + s.url + '" target="_blank" rel="noopener noreferrer nofollow" style="display: inline-block; background: white; color: #2E7D32; font-size: 13px; font-weight: 600; padding: 10px 20px; border-radius: 999px; text-decoration: none; white-space: nowrap; min-height: 44px; line-height: 24px; border: 1px solid #2E7D32;">View Stack →</a></div>'; }).join('') : '';
   var buyHtml = buyLink ? '<div style="margin-top: 16px; padding: 16px; background: #F0FFF4; border: 1px solid #C6F6D5; border-radius: 12px;"><div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;"><div><div style="font-size: 13px; font-weight: 600; color: #2E7D32;">Available from Verified Source</div><div style="font-size: 12px; color: #666666; margin-top: 2px;">Ascension Peptides • COA included • Research use only</div></div><a href="' + buyLink + '" target="_blank" rel="noopener noreferrer nofollow" style="display: inline-block; background: #2E7D32; color: white; font-size: 13px; font-weight: 600; padding: 10px 20px; border-radius: 999px; text-decoration: none; white-space: nowrap; min-height: 44px; line-height: 24px;">View Product →</a></div>' + stackHtml + '</div>' : '';
   var modalDisclaimer = '<div style="margin-top: 16px; padding: 12px; background: var(--bg-surface); border-radius: 8px; font-size: 11px; color: var(--text-muted); line-height: 1.5;">This information is for research purposes only and does not constitute medical advice. Always consult a healthcare provider before making decisions about any compound.</div>';
-  overviewSummary.innerHTML = '<h3>Summary</h3><div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: #666666;"><div><strong>Category:</strong> ' + compound.category + '</div><div><strong>Research Studies:</strong> ' + compound.studies + ' peer-reviewed studies</div>' + (sources.regulatory ? '<div><strong>FDA Status:</strong> ' + sources.regulatory.fdaStatus + '</div>' : '') + '</div>' + buyHtml + modalDisclaimer;
+  overviewSummary.innerHTML = '<h3>Summary</h3><div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: #666666;"><div><strong>Category:</strong> ' + compound.category + '</div><div><strong>Research Studies:</strong> ' + compound.studies + ' peer-reviewed studies</div>' + (sources.regulatory ? '<div><strong>FDA Status:</strong> ' + sources.regulatory.fdaStatus + '</div>' : '') + '</div>' + buyHtml + modalDisclaimer + (typeof renderRelatedArticles === 'function' ? renderRelatedArticles(compound) : '');
 
   // Benefits tab
   const benefitsHtml = compound.benefits.map(b => '<div style="background: #F2F2F2; border: none; border-radius: 8px; padding: 12px; color: #1A1A1A;">' + b + '</div>').join('');
